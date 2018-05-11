@@ -2,6 +2,7 @@
 using NHibernate.Criterion;
 using NHibernate.Linq;
 using NHibernate.Transform;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,13 @@ using System.Web;
 
 namespace Bibliotech.Base
 {
-    public class BaseRepository<T> where T : class
+    public abstract class BaseRepository<T> where T : class
     {
+        protected virtual void DoAfterGet(T obj)
+        {
+
+        }
+
         public virtual T GetById(object id)
         {
             using (ISession session = NHibernateHelper.OpenSession())
@@ -25,6 +31,7 @@ namespace Bibliotech.Base
                 if (result.Count > 0)
                     obj = result[0];
 
+                DoAfterGet(obj);
                 return obj;
             }
         }
@@ -45,6 +52,7 @@ namespace Bibliotech.Base
 
                         if (value1 != null && value2 != null && value1.ToString().ToLower() == value2.ToString().ToLower())
                         {
+                            DoAfterGet(listExample[0]);
                             return listExample[0];
                         }
                     }
@@ -64,7 +72,7 @@ namespace Bibliotech.Base
             }
         }
 
-        public virtual List<T> GetPagedList(int? page, Int32 quantidade)
+        public virtual IPagedList<T> GetPagedList(int? page, Int32 quantidade)
         {
             int pagina = page == null ? 1 : (int)page;
 
@@ -75,7 +83,9 @@ namespace Bibliotech.Base
 
                 criteria.SetFirstResult(pagina).SetMaxResults(quantidade);
 
-                return list;
+                PagedList<T> resultList = (PagedList<T>)list.ToPagedList<T>(pagina, quantidade);
+
+                return resultList;
             }
         }
 
