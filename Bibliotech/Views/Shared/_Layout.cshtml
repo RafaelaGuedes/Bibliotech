@@ -15,6 +15,7 @@
     <link href="~/Content/base/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="~/Content/base/css/sb-admin.css" rel="stylesheet">
+    <link href="~/Content/PagedList.css" rel="stylesheet">
 </head>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
     <!-- Navigation-->
@@ -255,7 +256,7 @@
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="login.html">Logout</a>
+                        <a class="btn btn-primary" href="~/Account/SignOut">Logout</a>
                     </div>
                 </div>
             </div>
@@ -267,10 +268,11 @@
         <script src="~/Content/base/vendor/jquery-easing/jquery.easing.min.js"></script>
         <!-- Custom scripts for all pages-->
         <script src="~/Content/base/js/sb-admin.min.js"></script>
+        <script src="~/Scripts/bootbox.js"></script>
     </div>
 
-    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)*@
+    @RenderSection("scripts", required: false)
 </body>
 </html>
