@@ -8,10 +8,11 @@
     ViewBag.Title = "Livro";
 }
 
-@model Usuario
+@model Livro
 
 @Html.Partial("~/Views/Livro/Manter.cshtml", Model)
 
 @section Scripts{
     @Scripts.Render("~/scripts/Util.js")
+    @Scripts.Render("~/scripts/Livro.js")
 }
