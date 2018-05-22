@@ -16,8 +16,10 @@ namespace Bibliotech.Base
         {
 
         }
+        
+        public abstract void LazyProperties(T model);
 
-        public virtual T GetById(object id)
+        public virtual T GetById(object id, bool lazyProperties = true)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -32,11 +34,15 @@ namespace Bibliotech.Base
                     obj = result[0];
 
                 DoAfterGet(obj);
+
+                if(lazyProperties)
+                    LazyProperties(obj);
+
                 return obj;
             }
         }
 
-        public T GetByExample(T example)
+        public T GetByExample(T example, bool lazyProperties = false)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -53,20 +59,32 @@ namespace Bibliotech.Base
                         if (value1 != null && value2 != null && value1.ToString().ToLower() == value2.ToString().ToLower())
                         {
                             DoAfterGet(listExample[0]);
+                            if (lazyProperties)
+                                LazyProperties(listExample[0]);
+
                             return listExample[0];
                         }
                     }
                 }
             }
+
             return default(T);
         }
 
-        public virtual List<T> GetList()
+        public virtual List<T> GetList(bool lazyProperties = false)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
                 ICriteria criteria = session.CreateCriteria(typeof(T));
                 List<T> list = criteria.List<T>().ToList();
+
+                if (lazyProperties)
+                {
+                    foreach (var obj in list)
+                    {
+                        LazyProperties(obj);
+                    }
+                }
 
                 return list;
             }
@@ -163,6 +181,7 @@ namespace Bibliotech.Base
             using (ISession session = NHibernateHelper.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {
+                session.Clear();
                 BeforeCommitSaveOrUpdate(session, ref entity);
                 session.SaveOrUpdate(entity);
                 transaction.Commit();
@@ -227,14 +246,6 @@ namespace Bibliotech.Base
                 }
 
                 transaction.Commit();
-            }
-        }
-
-        public IList<T> Consultar()
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                return (from c in session.Query<T>() select c).ToList();
             }
         }
     }
