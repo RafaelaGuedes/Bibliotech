@@ -48,5 +48,9 @@ namespace Bibliotech.Repository
                 return criteria.List<Autor>().ToList();
             }
         }
+
+        public override void LazyProperties(Autor entity)
+        {
+        }
     }
 }
