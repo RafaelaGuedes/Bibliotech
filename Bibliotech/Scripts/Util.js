@@ -17,6 +17,21 @@ function salvar(controllerName) {
     });
 }
 
+function submitAction(controllerName, actionName) {
+    $.ajax({
+        type: "POST",
+        url: "/" + controllerName + "/" + actionName,
+        data: $("#myForm").serialize(),
+        success: function (data) {
+            sucesso(data);
+        },
+        error: function (msg) {
+            var title = (/<title>(.*?)<\/title>/m).exec(msg.responseText)[1];
+            bootbox.alert(title);
+        }
+    });
+}
+
 $(document).ready(function () {
     posLoad();
 });
