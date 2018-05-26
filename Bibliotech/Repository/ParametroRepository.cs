@@ -78,6 +78,23 @@ namespace Bibliotech.Repository
             
         }
 
-        
+        public virtual Parametro GetParametro()
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                ICriteria criteria = session.CreateCriteria(typeof(Parametro));
+                criteria.SetMaxResults(1);
+                var result = criteria.List<Parametro>();
+
+                Parametro obj = null;
+
+                if (result.Count > 0)
+                    obj = result[0];
+
+                DoAfterGet(obj);
+
+                return obj;
+            }
+        }
     }
 }

@@ -248,5 +248,22 @@ namespace Bibliotech.Base
                 transaction.Commit();
             }
         }
+
+        public T GetFirst(T exemplo, bool lazyProperties = false)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                ICriteria criteria = session.CreateCriteria(typeof(T)).Add(Example.Create(exemplo));
+
+                var list = criteria.SetMaxResults(1).List<T>().ToList();
+                var obj = list.Count > 0 ? list[0] : null;
+
+                if (obj != null && lazyProperties)
+                    LazyProperties(obj);
+                DoAfterGet(obj);
+
+                return obj;
+            }
+        }
     }
 }
