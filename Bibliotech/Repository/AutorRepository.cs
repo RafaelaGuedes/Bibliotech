@@ -51,7 +51,7 @@ namespace Bibliotech.Repository
 
         public override void LazyProperties(Autor entity)
         {
-            
+
         }
     }
 }
