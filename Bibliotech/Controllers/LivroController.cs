@@ -36,6 +36,15 @@ namespace Bibliotech.Controllers
             return View(livro);
         }
 
+        public ActionResult Acervo(Livro exemplo, int page = 1)
+        {
+            var list = LivroRepository.Instance.GetListLivroByExample(exemplo)
+                .OrderBy(x => x.Titulo)
+                .ToPagedList(page, Constantes.LIMITE_REGISTROS_PAGINA);
+
+            return View(new Tuple<IPagedList<Livro>, Livro>(list, exemplo));
+        }
+
         [HttpPost]
         public JsonResult Salvar(Livro livro)
         {
@@ -105,11 +114,6 @@ namespace Bibliotech.Controllers
             }
 
             return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Acervo()
-        {
-            return View();
         }
 
         public ActionResult GetImagemCapa(Guid id)

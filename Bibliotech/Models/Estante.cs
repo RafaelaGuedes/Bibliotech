@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bibliotech.Models
 {
@@ -12,6 +13,7 @@ namespace Bibliotech.Models
     {
         public virtual Guid? Id { get; set; }
 
+        [Display(Name = "Descrição")]
         public virtual string Descricao { get; set; }
 
         [XmlIgnore]

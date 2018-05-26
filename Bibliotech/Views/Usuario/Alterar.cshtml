@@ -10,7 +10,12 @@
 
 @model Usuario
 
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery.mask.js"></script>
+
 @Html.Partial("~/Views/Usuario/Manter.cshtml", Model)
+
+
 
 @section Scripts{
     @Scripts.Render("~/scripts/Util.js")
