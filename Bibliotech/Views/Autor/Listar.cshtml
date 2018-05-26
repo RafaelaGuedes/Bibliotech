@@ -19,7 +19,7 @@
                 <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalSearch">
                     <i class="fa fa-filter"></i> Filtrar
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="adicionar('Livro')">
+                <button type="button" class="btn btn-primary btn-sm" onclick="adicionar('Autor')">
                     <i class="fa fa-plus"></i> Adicionar
                 </button>
             </div>
@@ -41,14 +41,14 @@
                 @foreach (var item in Model.Item1)
                 {
                     <tr class="d-flex">
-                        <td class="col-5">@(item.Titulo)</td>
+                        <td class="col-5">@(item.Nome)</td>
                         <td class="col-3">ADD AUTOR</td>
-                        <td class="col-2">@(item.Edicao)</td>
+                        <td class="col-2">@(item.Id)</td>
                         <td class="col-2 text-center">
-                            <button type="button" class="btn btn-warning" onclick="alterar('Livro', 'id', '@(item.Id)')">
+                            <button type="button" class="btn btn-warning" onclick="alterar('Autor', 'id', '@(item.Id)')">
                                 <i class="fa fa-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-danger" onclick="remover('Livro', '@(item.Id)')">
+                            <button type="button" class="btn btn-danger" onclick="remover('Autor', '@(item.Id)')">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </td>
@@ -71,10 +71,9 @@
             @Html.PagedListPager(Model.Item1, (page) => Url.Action("Listar",
                              new RouteValueDictionary
                     {   { "page", page },
-                        { "Titulo", Model.Item2 != null ? Model.Item2.Titulo : null },
-                        { "Isbn", Model.Item2 != null ? Model.Item2.Isbn : null },
-                        { "Edicao", Model.Item2 != null ? Model.Item2.Edicao : null },
-                        { "Assunto", Model.Item2 != null ? Model.Item2.Assunto : null }
+                        { "Nome", Model.Item2 != null ? Model.Item2.Nome : null },
+                        { "Telefone", Model.Item2 != null ? Model.Item2.Telefone : null },
+
                     }), PagedListRenderOptions.ClassicPlusFirstAndLast)
         </div>
     }
@@ -96,27 +95,15 @@
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        @Html.LabelFor(x => x.Item2.Titulo, new { @class = "col-sm-2 control-label" })
+                        @Html.LabelFor(x => x.Item2.Nome, new { @class = "col-sm-2 control-label" })
                         <div class="col-sm-6">
-                            @Html.TextBox("Titulo", Model.Item2.Titulo, new { @class = "form-control" })
+                            @Html.TextBox("Nome", Model.Item2.Nome, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(x => x.Item2.Isbn, new { @class = "col-sm-2 control-label" })
+                        @Html.LabelFor(x => x.Item2.Telefone, new { @class = "col-sm-2 control-label" })
                         <div class="col-sm-6">
-                            @Html.TextBox("Isbn", Model.Item2.Isbn, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(x => x.Item2.Assunto, new { @class = "col-sm-2 control-label" })
-                        <div class="col-sm-6">
-                            @Html.TextBox("Assunto", Model.Item2.Assunto, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(x => x.Item2.Edicao, new { @class = "col-sm-2 control-label" })
-                        <div class="col-sm-6">
-                            @Html.TextBox("Edicao", Model.Item2.Edicao, new { @class = "form-control" })
+                            @Html.TextBox("Telefone", Model.Item2.Telefone, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="modal-footer">

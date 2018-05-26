@@ -45,5 +45,10 @@ namespace Bibliotech.Repository
                 return criteria.List<Estante>().ToList();
             }
         }
+
+        public override void LazyProperties(Estante entity)
+        {
+
+        }
     }
 }

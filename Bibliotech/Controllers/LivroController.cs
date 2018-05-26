@@ -71,5 +71,13 @@ namespace Bibliotech.Controllers
 
             return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Acervo()
+        {
+
+
+
+            return View();
+        }
     }
 }
