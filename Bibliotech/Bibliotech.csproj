@@ -489,6 +489,8 @@
     <Content Include="Views\Estante\Alterar.cshtml" />
     <Content Include="Views\Estante\Listar.cshtml" />
     <Content Include="Views\Estante\Manter.cshtml" />
+    <Content Include="Views\Shared\CardsUsuario.cshtml" />
+    <Content Include="Views\Shared\CardsStaff.cshtml" />
     <Content Include="Views\Livro\Acervo.cshtml" />
   </ItemGroup>
   <ItemGroup>
