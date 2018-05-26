@@ -27,7 +27,14 @@ namespace Bibliotech.Models
         [Display(Name = "Limite de Empréstimos")]
         public virtual int? QuantidadeMaximaEmprestimo { get; set; }
 
+        [Display(Name = "Email Remetente")]
+        public virtual string EmailRemetente { get; set; }
+
+        public virtual string Senha { get; set; }
+
         public virtual byte[] Version { get; set; }
+
+
 
     }
 
@@ -42,6 +49,8 @@ namespace Bibliotech.Models
             Map(x => x.DiasPrazoDevolucao);
             Map(x => x.DiasPrazoReserva);
             Map(x => x.QuantidadeMaximaEmprestimo);
+            Map(x => x.EmailRemetente).Length(200).Not.Nullable();
+            Map(x => x.Senha).Not.Nullable();
 
             Version(x => x.Version)
                 .Nullable()
