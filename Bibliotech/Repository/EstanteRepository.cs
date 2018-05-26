@@ -39,16 +39,43 @@ namespace Bibliotech.Repository
                 if (entity.Descricao != null)
                     criteria.Add(Restrictions.InsensitiveLike("Descricao", "%" + entity.Descricao + "%"));
 
-               
-              
-
                 return criteria.List<Estante>().ToList();
             }
         }
 
         public override void LazyProperties(Estante entity)
         {
+            if(entity.Prateleiras != null)
+            {
+                foreach (var item in entity.Prateleiras)
+                    item.ToString();
+            }
+        }
 
+        public override void BeforeCommitSaveOrUpdate(ISession session, ref Estante entity)
+        {
+            if (entity.Prateleiras != null)
+            {
+                for (int i = 0; i < entity.Prateleiras.Count; i++)
+                {
+                    if (Functions.IsNullExcludingProperties(entity.Prateleiras[i], "Id"))
+                    {
+                        if (entity.Prateleiras[i].Id != null)
+                        {
+                            entity.Prateleiras[i] = (Prateleira)session.Get("Prateleira", entity.Prateleiras[i].Id);
+                            session.Delete(entity.Prateleiras[i]);
+                        }
+                        entity.Prateleiras.Remove(entity.Prateleiras[i]);
+                        i--;
+                        continue;
+                    }
+                    else
+                    {
+                        entity.Prateleiras[i].Estante = entity;
+                    }
+
+                }
+            }
         }
     }
 }

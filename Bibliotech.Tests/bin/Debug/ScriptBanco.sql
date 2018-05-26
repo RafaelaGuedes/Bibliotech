@@ -93,11 +93,13 @@ alter table [Prateleira]  drop constraint FKF4E80CA1E9022747
     create table [Parametro] (
         Id UNIQUEIDENTIFIER not null,
        Version timestamp null,
-       ValorMultaAtraso DECIMAL(19,5) null,
+       ValorMultaAtraso DECIMAL(19, 2) null,
        DiasAlteracaoSenha INT null,
        DiasPrazoDevolucao INT null,
        DiasPrazoReserva INT null,
        QuantidadeMaximaEmprestimo INT null,
+       EmailRemetente NVARCHAR(200) null,
+       Senha NVARCHAR(255) null,
        primary key (Id)
     )
 
