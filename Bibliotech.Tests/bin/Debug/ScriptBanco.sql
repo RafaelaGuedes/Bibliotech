@@ -27,6 +27,8 @@ alter table [Prateleira]  drop constraint FKF4E80CA1E9022747
 
     if exists (select * from dbo.sysobjects where id = object_id(N'[Livro]') and OBJECTPROPERTY(id, N'IsUserTable') = 1) drop table [Livro]
 
+    if exists (select * from dbo.sysobjects where id = object_id(N'[Parametro]') and OBJECTPROPERTY(id, N'IsUserTable') = 1) drop table [Parametro]
+
     if exists (select * from dbo.sysobjects where id = object_id(N'[Prateleira]') and OBJECTPROPERTY(id, N'IsUserTable') = 1) drop table [Prateleira]
 
     if exists (select * from dbo.sysobjects where id = object_id(N'[Usuario]') and OBJECTPROPERTY(id, N'IsUserTable') = 1) drop table [Usuario]
@@ -84,7 +86,18 @@ alter table [Prateleira]  drop constraint FKF4E80CA1E9022747
        Edicao INT null,
        NumeroPaginas INT null,
        Assunto NVARCHAR(200) null,
-       NomeArquivo NVARCHAR(300) null,
+       NomeFoto NVARCHAR(300) null,
+       primary key (Id)
+    )
+
+    create table [Parametro] (
+        Id UNIQUEIDENTIFIER not null,
+       Version timestamp null,
+       ValorMultaAtraso DECIMAL(19,5) null,
+       DiasAlteracaoSenha INT null,
+       DiasPrazoDevolucao INT null,
+       DiasPrazoReserva INT null,
+       QuantidadeMaximaEmprestimo INT null,
        primary key (Id)
     )
 

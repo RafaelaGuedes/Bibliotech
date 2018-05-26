@@ -5,6 +5,7 @@ using Bibliotech.Util;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -40,6 +41,27 @@ namespace Bibliotech.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (Request.Files.Count > 0)
+                {
+                    HttpPostedFileBase file = Request.Files[0];
+                    MemoryStream target = new MemoryStream();
+                    file.InputStream.CopyTo(target);
+                    livro.NomeFoto = Request.Files[0].FileName;
+                }
+
+                if (livro.Id != null)
+                {
+                    if (System.IO.Directory.Exists(Server.MapPath("~/LivroFiles/" + livro.Id.ToString())))
+                    {
+                        System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(Server.MapPath("~/LivroFiles/" + livro.Id.ToString()));
+                        foreach (System.IO.FileInfo file in directory.GetFiles())
+                        {
+                            if (file.Name != livro.NomeFoto)
+                                file.Delete();
+                        }
+                    }
+                }
+
                 if (!BLivro.Instance.ValidarSalvar(ref livro))
                 {
                     return Json(new { Status = BLivro.Instance.Status(), Message = BLivro.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
@@ -47,6 +69,15 @@ namespace Bibliotech.Controllers
                 try
                 {
                     LivroRepository.Instance.SaveOrUpdate(livro);
+
+                    if (Request.Files.Count > 0)
+                    {
+                        System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(Server.MapPath("~/LivroFiles/" + livro.Id.ToString()));
+                        if (!System.IO.Directory.Exists(directory.ToString()))
+                            System.IO.Directory.CreateDirectory(Server.MapPath("~/LivroFiles/" + livro.Id.ToString()));
+                        Request.Files[0].SaveAs(Server.MapPath("~/LivroFiles/" + livro.Id.ToString() + "/" + Request.Files[0].FileName));
+                    }
+
                     return Json(new { Status = BLivro.Instance.Status(), Message = BLivro.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
                 }
                 catch (NHibernate.StaleStateException dbcx)
@@ -68,16 +99,33 @@ namespace Bibliotech.Controllers
             }
 
             LivroRepository.Instance.Delete(livro);
+            if (System.IO.Directory.Exists(Server.MapPath("~/LivroFiles/" + id.ToString())))
+            {
+                System.IO.Directory.Delete(Server.MapPath("~/LivroFiles/" + id.ToString()), true);
+            }
 
             return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Acervo()
         {
-
-
-
             return View();
+        }
+
+        public ActionResult GetImagemCapa(Guid id)
+        {
+            byte[] imagemArray = null;
+            var livro = LivroRepository.Instance.GetById(id);
+            string filePath = Server.MapPath("~/LivroFiles/" + id + "/" + livro.NomeFoto);
+            imagemArray = System.IO.File.ReadAllBytes(filePath);
+            if (imagemArray == null)
+            {
+                return null;
+            }
+            else
+            {
+                return new FileContentResult(imagemArray, "image/jpeg");
+            }
         }
     }
 }

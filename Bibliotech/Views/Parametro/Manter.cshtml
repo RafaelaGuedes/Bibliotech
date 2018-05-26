@@ -70,18 +70,10 @@
 </div>
 
 <script>
-    //function posLoad() {
-    //    var arrayCamposTelefone = ["Telefone"];
-    //    var arrayCamposData = ["DataNascimento"];
-
-    //    inserirMascaraTelefone(arrayCamposTelefone);
-    //    inserirMascaraData(arrayCamposData);
-    //}
-
     function sucesso(data) {
         bootbox.alert(data.Message, function () {
             if (data.Status == 0) {
-                window.location.href = "/Parametro/Listar";
+                window.location.href = "/Parametro/Manter";
             }
         });
     }

@@ -17,7 +17,7 @@ namespace Bibliotech.Controllers
         
         public ActionResult Manter()
         {
-            Parametro parametro = ParametroRepository.Instance.GetFirst(new Parametro());
+            Parametro parametro = ParametroRepository.Instance.GetParametro() ?? new Parametro();
 
             return View(parametro);
         }
