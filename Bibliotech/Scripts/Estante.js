@@ -7,7 +7,7 @@
         '<div class="col-3">' +
         '<input class="form-control" id="Prateleiras_' + qtd + '__Descricao" name="Prateleiras[' + qtd + '].Descricao" type="text" value="">' +
         '</div>' +
-        '<div class="col-6">' +
+        '<div class="col-9">' +
         '<button type="button" class="btn btn-danger btn-sm" onclick="removerPrateleira(' + qtd + ');">' +
         '<i class="fa fa-trash"></i>' +
         '</button>' +
@@ -30,7 +30,7 @@ function validarSalvarPrateleiras() {
         var descricao = document.getElementById('Prateleiras_' + i + '__Descricao');
 
         if (descricao != null && descricao.value == "") {
-            bootbox.alert("O campo descrição é obrigatório.");
+            bootbox.alert("O campo Descrição é obrigatório.");
             return false;
         }
     }

@@ -429,6 +429,7 @@
     <Content Include="bin\roslyn\vbc.rsp" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\Estante.js" />
     <Content Include="Scripts\html5-qrcode.js" />
     <Content Include="Scripts\html5-qrcode.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -476,6 +477,7 @@
     <Content Include="Scripts\jQuery-Mask-Plugin-master\test\zepto\data.js" />
     <Content Include="Scripts\jQuery-Mask-Plugin-master\test\zepto\event.js" />
     <Content Include="Scripts\jQuery-Mask-Plugin-master\test\zepto\zepto.min.js" />
+    <Content Include="Scripts\jquery.mask.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

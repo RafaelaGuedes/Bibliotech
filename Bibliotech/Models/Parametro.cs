@@ -49,8 +49,8 @@ namespace Bibliotech.Models
             Map(x => x.DiasPrazoDevolucao);
             Map(x => x.DiasPrazoReserva);
             Map(x => x.QuantidadeMaximaEmprestimo);
-            Map(x => x.EmailRemetente).Length(200).Not.Nullable();
-            Map(x => x.Senha).Not.Nullable();
+            Map(x => x.EmailRemetente).Length(200);
+            Map(x => x.Senha);
 
             Version(x => x.Version)
                 .Nullable()

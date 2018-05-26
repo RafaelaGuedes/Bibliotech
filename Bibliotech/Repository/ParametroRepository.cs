@@ -30,47 +30,14 @@ namespace Bibliotech.Repository
 
         public override void BeforeCommitSaveOrUpdate(ISession session, ref Parametro entity)
         {
-            entity.Senha = CriptografiaHelper.Encriptar(entity.Senha);
+            if(entity != null && entity.Senha != null)
+                entity.Senha = CriptografiaHelper.Encriptar(entity.Senha);
         }
 
         protected override void DoAfterGet(Parametro entity)
         {
-            if (entity != null)
+            if (entity != null && entity.Senha != null)
                 entity.Senha = CriptografiaHelper.Decriptar(entity.Senha);
-        }
-
-        public List<Parametro> GetListUsuarioByExample(Parametro entity)
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                ICriteria criteria = session.CreateCriteria(typeof(Parametro));
-
-                if (entity.Id != null)
-                    criteria.Add(Restrictions.Eq("Id", entity.Id));
-
-                if (entity.DiasAlteracaoSenha != null)
-                    criteria.Add(Restrictions.Eq("Dias de Alteração de Senha", entity.DiasAlteracaoSenha));
-
-                if (entity.DiasPrazoDevolucao != null)
-                    criteria.Add(Restrictions.Eq("Prazo de Devolução", entity.DiasPrazoDevolucao));
-
-                if (entity.Email != null)
-                    criteria.Add(Restrictions.InsensitiveLike("Email", "%" + entity.Email + "%"));
-
-                if (entity.DiasPrazoReserva!= null)
-                    criteria.Add(Restrictions.InsensitiveLike("Prazo de Reserva", "%" + entity.DiasPrazoReserva + "%"));
-
-                if (entity.QuantidadeMaximaEmprestimo != null)
-                    criteria.Add(Restrictions.InsensitiveLike("Quantidade de Emprestimo", "%" + entity.QuantidadeMaximaEmprestimo + "%"));
-
-                return criteria.List<Parametro>().ToList();
-            }
-        }
-
-
-        internal Parametro GetFirst(Parametro parametro)
-        {
-            throw new NotImplementedException();
         }
 
         public override void LazyProperties(Parametro entity)
