@@ -5,7 +5,8 @@ using Bibliotech.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Net.Mail;
+
 
 namespace Bibliotech.Business
 {
@@ -98,5 +99,9 @@ namespace Bibliotech.Business
             SetStatusSucesso();
             return true;
         }
+
+        
+
+        
     }
 }
