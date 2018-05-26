@@ -33,6 +33,9 @@ namespace Bibliotech.Controllers
                 try
                 {
                     EmprestimoRepository.Instance.SaveOrUpdateEmprestimoUpdateExemplar(emprestimo, exemplar);
+                    
+                    //EnvioEmail está na Business de Parametro
+                    BParametro.Instance.EnvioEmail(emprestimo);
 
                     return Json(new { Status = BEmprestimo.Instance.Status(), Message = Mensagens.EMPRESTIMO_SUCESSO }, JsonRequestBehavior.AllowGet);
                 }
