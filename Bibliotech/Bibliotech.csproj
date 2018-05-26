@@ -122,6 +122,12 @@
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
+    <Reference Include="zxing, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.4\lib\net45\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.4\lib\net45\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -159,12 +165,14 @@
     <Compile Include="Base\Functions.cs" />
     <Compile Include="Business\BAutor.cs" />
     <Compile Include="Business\BEditora.cs" />
+    <Compile Include="Business\BEmprestimo.cs" />
     <Compile Include="Business\BEstante.cs" />
     <Compile Include="Business\BLivro.cs" />
     <Compile Include="Business\BParametro.cs" />
     <Compile Include="Business\BUsuario.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AutorController.cs" />
+    <Compile Include="Controllers\EmprestimoController.cs" />
     <Compile Include="Controllers\EstanteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LivroController.cs" />
@@ -174,6 +182,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Base\NHibernateHelper.cs" />
+    <Compile Include="Models\Emprestimo.cs" />
     <Compile Include="Models\Exemplar.cs" />
     <Compile Include="Models\Autor.cs" />
     <Compile Include="Models\Editora.cs" />
@@ -188,7 +197,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AutorRepository.cs" />
     <Compile Include="Repository\EditoraRepository.cs" />
+    <Compile Include="Repository\EmprestimoRepository.cs" />
     <Compile Include="Repository\EstanteRepository.cs" />
+    <Compile Include="Repository\ExemplarRepository.cs" />
     <Compile Include="Repository\LivroRepository.cs" />
     <Compile Include="Repository\ParametroRepository.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
@@ -417,6 +428,8 @@
     <Content Include="bin\roslyn\vbc.rsp" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\html5-qrcode.js" />
+    <Content Include="Scripts\html5-qrcode.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -466,6 +479,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jsqrcode-combined.min.js" />
     <Content Include="Scripts\Livro.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
@@ -503,12 +517,17 @@
     <Content Include="Views\Editora\Listar.cshtml" />
     <Content Include="Views\Editora\Manter.cshtml" />
     <Content Include="Views\Parametro\Manter.cshtml" />
+    <Content Include="Views\Emprestimo\Emprestimo.cshtml" />
+    <Content Include="Views\Emprestimo\Manter.cshtml" />
+    <Content Include="Views\Emprestimo\Devolucao.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

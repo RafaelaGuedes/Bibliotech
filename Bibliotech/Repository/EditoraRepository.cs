@@ -48,6 +48,7 @@ namespace Bibliotech.Repository
 
         public override void LazyProperties(Editora entity)
         {
+
         }
     }
 }

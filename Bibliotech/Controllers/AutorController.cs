@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace Bibliotech.Controllers
 {
+    [Authorize]
     public class AutorController : Controller
     {
         public ActionResult Listar(int? page)
