@@ -54,8 +54,8 @@ namespace Bibliotech.Repository
                 if (entity.DiasPrazoDevolucao != null)
                     criteria.Add(Restrictions.Eq("Prazo de Devolução", entity.DiasPrazoDevolucao));
 
-                if (entity.Email != null)
-                    criteria.Add(Restrictions.InsensitiveLike("Email", "%" + entity.Email + "%"));
+                if (entity.EmailRemetente != null)
+                    criteria.Add(Restrictions.InsensitiveLike("Email", "%" + entity.EmailRemetente + "%"));
 
                 if (entity.DiasPrazoReserva!= null)
                     criteria.Add(Restrictions.InsensitiveLike("Prazo de Reserva", "%" + entity.DiasPrazoReserva + "%"));
