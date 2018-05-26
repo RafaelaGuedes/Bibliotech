@@ -67,5 +67,10 @@ namespace Bibliotech.Repository
                 return criteria.List<Usuario>().ToList();
             }
         }
+
+        public override void LazyProperties(Usuario model)
+        {
+            
+        }
     }
 }

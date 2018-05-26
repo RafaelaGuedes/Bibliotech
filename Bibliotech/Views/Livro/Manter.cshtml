@@ -13,35 +13,89 @@
         </div>
     </div>
 
-    <div class="panel-body">
-        @using (Ajax.BeginForm("Salvar", "Livro", null,
-                new AjaxOptions { HttpMethod = "post", OnSuccess = "sucesso" }, new { id = "myForm" }))
-        {
+    <br />
+
+    <ul id="myTab" class="nav nav-tabs" role="tablist">
+        <li class="nav-item"><a class="nav-link active" id="tabLivro" href="#livro" role="tab" data-toggle="tab">Informações do Livro</a></li>
+        <li class="nav-item"><a class="nav-link" id="tabExemplares" href="#exemplares" role="tab" data-toggle="tab">Exemplares</a></li>
+    </ul>
+
+    @using (Ajax.BeginForm("Salvar", "Livro", null,
+                                                                new AjaxOptions { HttpMethod = "post", OnSuccess = "sucesso" }, new { id = "myForm" }))
+    {
+        <div class="panel-body tab-content">
+
             @Html.ValidationSummary(true)
             @Html.HiddenFor(x => x.Id)
             @Html.HiddenFor(x => x.Version)
 
-            <div class="form-row">
-                <div class="form-group col-md-5">
-                    @Html.LabelFor(x => x.Titulo)
-                    @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", type = "text" })
+            <div id="livro" class="tab-pane active">
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        @Html.LabelFor(x => x.Titulo)
+                        @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", type = "text" })
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        @Html.LabelFor(x => x.Isbn)
+                        @Html.TextBoxFor(x => x.Isbn, new { @class = "form-control", type = "text" })
+                    </div>
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group col-md-5">
-                    @Html.LabelFor(x => x.Isbn)
-                    @Html.TextBoxFor(x => x.Isbn, new { @class = "form-control", type = "text" })
+            <div id="exemplares" class="tab-pane">
+                @Html.Hidden("qtdExemplares", (Model != null && Model.Exemplares != null ? Model.Exemplares.Count : 0))
+                <div class="col col-xs-6 text-right">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="inserirExemplar()">
+                        <i class="fa fa-plus"></i> Inserir Exemplar
+                    </button>
                 </div>
+
+                <br />
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr class="d-flex">
+                            <th class="col-3">Código</th>
+                            <th class="col-3">Exclusivo da Biblioteca</th>
+                            <th class="col-6"><i class="fa fa-cog"></i></th>
+                        </tr>
+                    </thead>
+                </table>
+
+                @for (int i = 0; i < (Model != null && Model.Exemplares != null ? Model.Exemplares.Count : 0); i++)
+                {
+                    @Html.HiddenFor(x => x.Exemplares[i].Id)
+                    <div class="form-row" id="divExemplares_@i">
+                        <div class="col-3">
+                            @Html.TextBoxFor(x => x.Exemplares[i].Codigo, new { @class = "form-control", type = "text" })
+                        </div>
+                        <div class="col-3 text-center">
+                            @Html.CheckBox("Exemplares[" + i + "].ExclusivoBiblioteca", Model.Exemplares[i].ExclusivoBiblioteca ?? false)
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removerExemplar(@i);">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <div id="divExemplares_n"></div>
             </div>
 
-            <div class="panel-footer">
-                <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
-                <button class="btn btn-primary" type="button" onclick="salvar('Livro')">Salvar</button>
-            </div>
+        </div>
 
-        }
-    </div>
+        <br />
+
+        <div class="panel-footer">
+            <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
+            <button class="btn btn-primary" type="button" onclick="salvar('Livro')">Salvar</button>
+        </div>
+    }
+
 </div>
 
 <script>
