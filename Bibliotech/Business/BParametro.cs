@@ -43,36 +43,5 @@ namespace Bibliotech.Business
             SetStatusSucesso();
             return true;
         }
-
-        public void EnvioEmail(Emprestimo emprestimo)
-        {
-            Parametro parametro = ParametroRepository.Instance.GetParametro();
-
-            string conteudo = "";
-
-           
-            conteudo += "Livro: " + livro.Titulo + " < br /> ";
-            conteudo += "Seu empréstimo foi realizado" + emprestimo.DataInicio + " <br />";
-            conteudo += "Data de entrega: " + emprestimo.DataFimPrevisao + " < br /> ";
-
-
-            //Envia o e-mail
-            MailMessage mail = new MailMessage(parametro.EmailRemetente, usuario.Email);
-            SmtpClient client = new SmtpClient();
-            client.Port = 587;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Host = "smtp.gmail.com";
-            client.EnableSsl = true;
-
-            mail.Subject = "Comprovante de Empréstimo";
-            mail.Body = conteudo;
-            mail.IsBodyHtml = true;
-
-            client.Credentials = new System.Net.NetworkCredential(parametro.EmailRemetente, parametro.Senha);
-            client.Send(mail);
-
-
-        }
     }
 }
