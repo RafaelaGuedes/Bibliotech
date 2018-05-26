@@ -30,7 +30,7 @@ namespace Bibliotech.Models
 
         public virtual string Assunto { get; set; }
 
-        public virtual string NomeArquivo { get; set; }
+        public virtual string NomeFoto { get; set; }
 
         public virtual byte[] Version { get; set; }
 
@@ -50,7 +50,7 @@ namespace Bibliotech.Models
             Map(x => x.Edicao);
             Map(x => x.NumeroPaginas);
             Map(x => x.Assunto).Length(200);
-            Map(x => x.NomeArquivo).Length(300);
+            Map(x => x.NomeFoto).Length(300);
 
             HasMany<Exemplar>(x => x.Exemplares).Cascade.All().Inverse().LazyLoad();
 

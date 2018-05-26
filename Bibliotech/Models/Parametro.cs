@@ -12,19 +12,19 @@ namespace Bibliotech.Models
     {
         public virtual Guid? Id { get; set; }
 
-        [Display(Name = "Valor da Multa")]
-        public virtual decimal ValorMultaAtraso { get; set; }
+        [Display(Name = "Valor da Multa por Dia")]
+        public virtual decimal? ValorMultaAtraso { get; set; }
 
-        [Display(Name = "Dias de Alteração de Senha")]
+        [Display(Name = "Prazo para Alteração de Senha")]
         public virtual int? DiasAlteracaoSenha { get; set; }
 
-        [Display(Name = "Prazo de devolução")]
+        [Display(Name = "Prazo de Devolução")]
         public virtual int? DiasPrazoDevolucao { get; set; }
 
         [Display(Name = "Prazo de Reserva")]
         public virtual int? DiasPrazoReserva { get; set; }
 
-        [Display(Name = "Quantidade de Empréstimo")]
+        [Display(Name = "Limite de Empréstimos")]
         public virtual int? QuantidadeMaximaEmprestimo { get; set; }
 
         public virtual byte[] Version { get; set; }
@@ -37,7 +37,7 @@ namespace Bibliotech.Models
         {
             Id(x => x.Id).GeneratedBy.GuidNative();
 
-            Map(x => x.ValorMultaAtraso);
+            Map(x => x.ValorMultaAtraso).Scale(2);
             Map(x => x.DiasAlteracaoSenha);
             Map(x => x.DiasPrazoDevolucao);
             Map(x => x.DiasPrazoReserva);
