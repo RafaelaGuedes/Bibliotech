@@ -21,7 +21,7 @@
     </ul>
 
     @using (Ajax.BeginForm("Salvar", "Livro", null,
-                                                                new AjaxOptions { HttpMethod = "post", OnSuccess = "sucesso" }, new { id = "myForm" }))
+                                                                        new AjaxOptions { HttpMethod = "post", OnSuccess = "sucesso" }, new { id = "myForm" }))
     {
         <div class="panel-body tab-content">
 
@@ -35,20 +35,87 @@
                     <tr>
                         <td class="col-8">
                             <div class="form-row">
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-6">
                                     @Html.LabelFor(x => x.Titulo)
                                     @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", type = "text" })
                                 </div>
                             </div>
 
                             <div class="form-row">
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-6">
+                                    @Html.HiddenFor(x => x.Autor.Id)
+                                    @Html.Label("Autor", new { @for = "Autor.Nome" })
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(x => x.Autor.Nome, new { @class = "form-control", type = "text", @readonly = "true" })
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalBuscarAutor">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    @Html.HiddenFor(x => x.Editora.Id)
+                                    @Html.Label("Editora", new { @for = "Editora.Nome" })
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(x => x.Editora.Nome, new { @class = "form-control", type = "text", @readonly = "true" })
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalBuscarEditora">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    @Html.LabelFor(x => x.Edicao)
+                                    @Html.TextBoxFor(x => x.Edicao, new { @class = "form-control number", type = "text" })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    @Html.LabelFor(x => x.AnoPublicao)
+                                    @Html.TextBoxFor(x => x.AnoPublicao, new { @class = "form-control number", type = "text" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    @Html.LabelFor(x => x.NumeroPaginas)
+                                    @Html.TextBoxFor(x => x.NumeroPaginas, new { @class = "form-control number", type = "text" })
+                                </div>
+                                <div class="form-group col-md-4">
                                     @Html.LabelFor(x => x.Isbn)
-                                    @Html.TextBoxFor(x => x.Isbn, new { @class = "form-control", type = "text" })
+                                    @Html.TextBoxFor(x => x.Isbn, new { @class = "form-control number", type = "text" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    @Html.LabelFor(x => x.Assunto)
+                                    @Html.TextBoxFor(x => x.Assunto, new { @class = "form-control", type = "text" })
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    @Html.HiddenFor(x => x.Prateleira.Id)
+                                    @Html.Label("Prateleira", new { @for = "Prateleira.Descricao" })
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(x => x.Prateleira.Descricao, new { @class = "form-control", type = "text", @readonly = "true" })
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalBuscarPrateleira">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </td>
-                        <td class="col-4">
+                        <td class="col-4" style="vertical-align: top;">
                             @Html.Label("Capa")
                             @if (Model == null || Model.NomeFoto == null)
                             {
@@ -114,10 +181,148 @@
             <button class="btn btn-primary" type="button" onclick="salvarLivro()">Salvar</button>
         </div>
     }
-
 </div>
 
 <script>
+    (function ($) {
+        $(function () {
+            $('.number').mask('0#');
+
+            $('.formSearch').on('keyup keypress', function (e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    })(jQuery);
+
+    function buscarEditora() {
+        $.ajax({
+            type: "POST",
+            url: "/Editora/Buscar",
+            data: $("#formBuscarEditora").serialize(),
+            success: function (data) {
+                sucessoEditoraSearch(data);
+            },
+            error: function (msg) {
+                var title = (/<title>(.*?)<\/title>/m).exec(msg.responseText)[1];
+                bootbox.alert(title);
+            }
+        });
+    }
+
+    function buscarAutor() {
+        $.ajax({
+            type: "POST",
+            url: "/Autor/Buscar",
+            data: $("#formBuscarAutor").serialize(),
+            success: function (data) {
+                sucessoAutorSearch(data);
+            },
+            error: function (msg) {
+                var title = (/<title>(.*?)<\/title>/m).exec(msg.responseText)[1];
+                bootbox.alert(title);
+            }
+        });
+    }
+
+    function buscarPrateleira() {
+        $.ajax({
+            type: "POST",
+            url: "/Prateleira/Buscar",
+            data: $("#formBuscarPrateleira").serialize(),
+            success: function (data) {
+                sucessoPrateleiraSearch(data);
+            },
+            error: function (msg) {
+                var title = (/<title>(.*?)<\/title>/m).exec(msg.responseText)[1];
+                bootbox.alert(title);
+            }
+        });
+    }
+
+    function sucessoEditoraSearch(data) {
+        if (data.Lista.length > 0) {
+            $("#listaEditoras").html("<div class='form-group'><div class='col-sm-8'><b>Nome</b></div>");
+            $.each(data.Lista, function (index, element) {
+                var itemHTML = ['<a class="form-popup-link" onclick="selecionarEditora(\'' + element.Id + '\',\'' + element.Nome + '\');">',
+                                    "<div class='col-sm-8'>",
+                                            element.Nome,
+                                    "</div>",
+                            "</a>"].join('\n');
+                $("#listaEditoras").append(itemHTML);
+            });
+        }
+        else
+            $("#listaEditoras").html("<div class=\"alert alert-secondary\" role=\"alert\">Nenhuma Editora encontrada.</div>");
+
+        return false;
+    }
+
+    function sucessoAutorSearch(data) {
+        if (data.Lista.length > 0) {
+            $("#listaAutores").html("<div class='form-group'><div class='col-sm-8'><b>Nome</b></div>");
+            $.each(data.Lista, function (index, element) {
+                var itemHTML = ['<a class="form-popup-link" onclick="selecionarAutor(\'' + element.Id + '\',\'' + element.Nome + '\');">',
+                                    "<div class='col-sm-8'>",
+                                            element.Nome,
+                                    "</div>",
+                            "</a>"].join('\n');
+                $("#listaAutores").append(itemHTML);
+            });
+        }
+        else
+            $("#listaAutores").html("<div class=\"alert alert-secondary\" role=\"alert\">Nenhum Autor encontrado.</div>");
+
+        return false;
+    }
+
+    function sucessoPrateleiraSearch(data) {
+        if (data.Lista.length > 0) {
+            $("#listaPrateleiras").html("<div class='form-row'><div class='col-sm-5'><b>Descrição</b></div><div class='col-sm-5'><b>Estante</b></div>");
+            $.each(data.Lista, function (index, element) {
+                var itemHTML = ['<a class="form-popup-link" onclick="selecionarPrateleira(\'' + element.Id + '\',\'' + element.Descricao + '\');">',
+                                    "<div class='form-row'>",
+                                        "<div class='col-sm-5'>",
+                                                element.Descricao,
+                                        "</div>",
+                                        "<div class='col-sm-5'>",
+                                                element.EstanteDescricao,
+                                        "</div>",
+                                    "</div>",
+                            "</a>"].join('\n');
+                $("#listaPrateleiras").append(itemHTML);
+            });
+        }
+        else
+            $("#listaPrateleiras").html("<div class=\"alert alert-secondary\" role=\"alert\">Nenhuma Prateleira encontrada.</div>");
+
+        return false;
+    }
+
+    function selecionarEditora(id, nome) {
+        $("#Editora_Id").val(id);
+        $("#Editora_Nome").val(nome);
+        $('#modalBuscarEditora').modal('hide');
+        $('.modal-backdrop').remove();
+    }
+
+    function selecionarAutor(id, nome) {
+        $("#Autor_Id").val(id);
+        $("#Autor_Nome").val(nome);
+        $('#modalBuscarAutor').modal('hide');
+        $('.modal-backdrop').remove();
+    }
+
+    function selecionarPrateleira(id, descricao) {
+        $("#Prateleira_Id").val(id);
+        $("#Prateleira_Descricao").val(descricao);
+        $('#modalBuscarPrateleira').modal('hide');
+        $('.modal-backdrop').remove();
+    }
+
     function sucesso(data) {
         bootbox.alert(data.Message, function () {
             if (data.Status == 0) {
@@ -162,7 +367,7 @@
             url: "/Livro/Salvar",
             success: function (data) {
                 sucesso(data);
-                },
+            },
             contentType: false,
             processData: false
         });

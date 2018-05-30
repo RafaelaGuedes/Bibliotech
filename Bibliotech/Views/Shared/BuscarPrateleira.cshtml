@@ -1,0 +1,28 @@
+﻿<div class="modal fade formSearch" id="modalBuscarPrateleira" tabindex="-1" role="dialog" aria-hidden="true">
+    @using (Ajax.BeginForm("Buscar", "Prateleira", null,
+                                        new AjaxOptions { HttpMethod = "post", OnSuccess = "sucessoPrateleiraSearch" }, new { id = "formBuscarPrateleira" }))
+    {
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buscar <small>Prateleira</small></h5>
+                    <button id="closeModalPrateleira" class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-md-8">
+                        @Html.Label("Descrição", new { @for = "prateleiraDescricaoSearch" })
+                        @Html.TextBox("Descricao", null, new { @id = "prateleiraDescricaoSearch", @class = "form-control", type = "text" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" onclick="buscarPrateleira()">Buscar</button>
+                </div>
+                <div id="listaPrateleiras" class="form-popup-resultados"></div>
+            </div>
+        </div>
+
+    }
+</div>

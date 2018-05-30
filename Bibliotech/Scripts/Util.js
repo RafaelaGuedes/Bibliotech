@@ -48,6 +48,10 @@ function alterar(controllerName, field, id) {
     window.location.href = "/" + controllerName + "/Alterar?" + field + "=" + id;
 }
 
+function visualizar(controllerName, field, id) {
+    window.location.href = "/" + controllerName + "/Visualizar?" + field + "=" + id;
+}
+
 function remover(controllerName, id) {
     bootbox.confirm("Deseja remover o registro?", function (confirmed) {
         if (confirmed) {

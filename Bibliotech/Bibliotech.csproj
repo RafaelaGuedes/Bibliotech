@@ -59,6 +59,9 @@
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NReco.ImageGenerator, Version=1.1.1.0, Culture=neutral, PublicKeyToken=0ef6c878974c90ac, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.ImageGenerator.1.1.1\lib\net20\NReco.ImageGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
     </Reference>
@@ -172,11 +175,13 @@
     <Compile Include="Business\BUsuario.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AutorController.cs" />
+    <Compile Include="Controllers\EditoraController.cs" />
     <Compile Include="Controllers\EmprestimoController.cs" />
     <Compile Include="Controllers\EstanteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LivroController.cs" />
     <Compile Include="Controllers\ParametroController.cs" />
+    <Compile Include="Controllers\PrateleiraController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -190,6 +195,7 @@
     <Compile Include="Models\Livro.cs" />
     <Compile Include="Models\Parametro.cs" />
     <Compile Include="Models\Prateleira.cs" />
+    <Compile Include="Models\Reserva.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
     <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
@@ -202,6 +208,7 @@
     <Compile Include="Repository\ExemplarRepository.cs" />
     <Compile Include="Repository\LivroRepository.cs" />
     <Compile Include="Repository\ParametroRepository.cs" />
+    <Compile Include="Repository\PrateleiraRepository.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
     <Compile Include="Util\Constantes.cs" />
     <Compile Include="Util\Mensagens.cs" />
@@ -319,6 +326,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\customcss.css" />
     <Content Include="Content\fontawesome-all.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
@@ -490,10 +498,16 @@
     <Content Include="Views\Estante\Listar.cshtml" />
     <Content Include="Views\Estante\Manter.cshtml" />
     <Content Include="Views\Livro\Acervo.cshtml" />
+    <Content Include="Views\Livro\Visualizar.cshtml" />
+    <Content Include="Views\Shared\BuscarAutor.cshtml" />
+    <Content Include="Views\Shared\BuscarEditora.cshtml" />
+    <Content Include="Views\Shared\BuscarPrateleira.cshtml" />
+    <Content Include="Views\Livro\GerarEtiquetaExemplar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="LivroFiles\" />
+    <Folder Include="Views\Prateleira\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

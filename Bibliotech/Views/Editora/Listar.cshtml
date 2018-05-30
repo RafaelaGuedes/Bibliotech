@@ -40,13 +40,14 @@
                 {
                     <tr class="d-flex">
                         <td class="col-5">@(item.Nome)</td>
-                        <td class="col-3">ADD EDITORA</td>
-                           <button type="button" class="btn btn-warning" onclick="alterar('Editora', 'id', '@(item.Id)')">
+                        <td class="col-2 text-center">
+                            <button type="button" class="btn btn-warning" onclick="alterar('Livro', 'id', '@(item.Id)')">
                                 <i class="fa fa-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-danger" onclick="remover('Editora', '@(item.Id)')">
+                            <button type="button" class="btn btn-danger" onclick="remover('Livro', '@(item.Id)')">
                                 <i class="fa fa-trash"></i>
                             </button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -66,8 +67,7 @@
             @Html.PagedListPager(Model.Item1, (page) => Url.Action("Listar",
                              new RouteValueDictionary
                     {   { "page", page },
-                        { "Nome", Model.Item2 != null ? Model.Item2.Nome : null },
-
+                        { "Nome", Model.Item2 != null ? Model.Item2.Nome : null }
                     }), PagedListRenderOptions.ClassicPlusFirstAndLast)
         </div>
     }

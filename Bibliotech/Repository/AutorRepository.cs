@@ -39,9 +39,6 @@ namespace Bibliotech.Repository
                 if (entity.Id != null)
                     criteria.Add(Restrictions.Eq("Id", entity.Id));
 
-                if (entity.DataNascimento != null)
-                    criteria.Add(Restrictions.Eq("DataNascimento", entity.DataNascimento));
-
                 if (entity.Nome != null)
                     criteria.Add(Restrictions.InsensitiveLike("Nome", "%" + entity.Nome + "%"));
 
