@@ -29,7 +29,9 @@ namespace Bibliotech.Models
         [Description("Disponível")]
         Disponivel = 1,
         Emprestado = 2,
-        Reservado = 3
+        Reservado = 3,
+        [Description("Exclusivo da Biblioteca")]
+        ExclusivoBiblioteca
     }
 
     public class ExemplarMap : ClassMap<Exemplar>

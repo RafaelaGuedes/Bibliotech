@@ -25,7 +25,7 @@ namespace Bibliotech.Models
         [Display(Name = "Edição")]
         public virtual int? Edicao { get; set; }
 
-        [Display(Name = "Número de Páginas")]
+        [Display(Name = "Páginas")]
         public virtual int? NumeroPaginas { get; set; }
 
         public virtual string Assunto { get; set; }
@@ -33,6 +33,12 @@ namespace Bibliotech.Models
         public virtual string NomeFoto { get; set; }
 
         public virtual byte[] Version { get; set; }
+
+        public virtual Autor Autor { get; set; }
+
+        public virtual Editora Editora { get; set; }
+
+        public virtual Prateleira Prateleira { get; set; }
 
         [XmlIgnore]
         public virtual IList<Exemplar> Exemplares { get; set; }
@@ -51,6 +57,10 @@ namespace Bibliotech.Models
             Map(x => x.NumeroPaginas);
             Map(x => x.Assunto).Length(200);
             Map(x => x.NomeFoto).Length(300);
+
+            References<Autor>(x => x.Autor).Not.Nullable();
+            References<Editora>(x => x.Editora).Not.Nullable();
+            References<Prateleira>(x => x.Prateleira);
 
             HasMany<Exemplar>(x => x.Exemplares).Cascade.All().Inverse().LazyLoad();
 

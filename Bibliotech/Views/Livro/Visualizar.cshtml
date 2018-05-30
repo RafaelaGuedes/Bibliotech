@@ -1,0 +1,123 @@
+﻿@using Bibliotech
+@using Bibliotech.Models
+@using PagedList
+@using PagedList.Mvc
+
+@model Livro
+
+@{
+    ViewBag.Action = "Livro";
+    ViewBag.Title = "Detalhes";
+}
+
+
+<div class="panel panel-default">
+    <br />
+
+    <div class="panel-heading">
+        <div class="row border-bottom" style="margin-left: 0px; margin-right: 0px;">
+            @Html.Partial("~/Views/Shared/_PageHeader.cshtml")
+        </div>
+    </div>
+
+    <br />
+
+    <div class="panel-body">
+        <div class="card">
+            <div class="card-header text-center">
+                <b>@Html.DisplayFor(x => x.Titulo)</b>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="col-12">
+                        <tr class="d-flex">
+                            <td class="col-4">
+                                @if (Model == null || Model.NomeFoto == null)
+                                {
+                                    <img id="imgFoto" src="@Url.Content("~/Images/capadefault.png")" style="max-height: 200px;  width: 150px" />
+                                }
+                                else
+                                {
+                                    <img id="imgFoto" src="@Url.Content("/Livro/GetImagemCapa/" + Model.Id)" style="max-height: 200px;  width: 150px" />
+                                }
+                            </td>
+                            <td class="col-5">
+                                <h5><i class="fa fa-info-circle" aria-hidden="true"></i> Informações</h5>
+                                <b>@Html.DisplayNameFor(x => x.Autor):</b> @Html.DisplayFor(x => x.Autor.Nome)<br />
+                                <b>@Html.DisplayNameFor(x => x.Editora):</b> @Html.DisplayFor(x => x.Editora.Nome)<br />
+                                <b>@Html.DisplayNameFor(x => x.Edicao):</b> @Html.DisplayFor(x => x.Edicao)<br />
+                                <b>@Html.DisplayNameFor(x => x.AnoPublicao):</b> @Html.DisplayFor(x => x.AnoPublicao)<br />
+                                <b>@Html.DisplayNameFor(x => x.NumeroPaginas):</b> @Html.DisplayFor(x => x.NumeroPaginas)<br />
+                                <b>@Html.DisplayNameFor(x => x.Isbn):</b> @Html.DisplayFor(x => x.Isbn)<br />
+                                <b>@Html.DisplayNameFor(x => x.Assunto):</b> @Html.DisplayFor(x => x.Assunto)<br />
+                            </td>
+                            <td class="col-3">
+                                <h5><i class="fa fa-server" aria-hidden="true"></i> Localização</h5>
+                                <b>@Html.DisplayNameFor(x => x.Prateleira.Estante):</b> @Html.DisplayFor(x => x.Prateleira.Estante.Descricao)<br />
+                                <b>@Html.DisplayNameFor(x => x.Prateleira):</b> @Html.DisplayFor(x => x.Prateleira.Descricao)<br />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Exemplares != null && Model.Exemplares.Count > 0)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr class="d-flex">
+                        <th class="col-2">Código</th>
+                        <th class="col-3">Status</th>
+                        <th class="col-7" style="text-align: right; padding-right: 80px !important;"><i class="fa fa-cog"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Exemplares)
+                {
+                        <tr class="d-flex">
+                            <td class="col-2">@(item.Codigo)</td>
+                            <td class="col-3">STATUS</td>
+                            <td class="col-7" style="text-align: right;">
+                                <button type="button" class="btn btn-secondary" onclick="gerarEtiqueta('@(item.Id)')">
+                                    <i class="fa fa-qrcode"></i> Gerar Etiqueta
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="reservar('@(item.Id)')">
+                                    <i class="fa fa-calendar-check-o"></i> Reservar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <br />
+            <div class="alert alert-secondary" role="alert">
+                Nenhum Exemplar encontrado.
+            </div>
+        }
+    </div>
+
+    <br />
+
+    <div class="panel-footer">
+        <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
+    </div>
+
+</div>
+
+<script>
+    function gerarEtiqueta(id) {
+        window.location.href = "/Livro/GerarEtiquetaExemplar?id=" + id;
+    }
+
+    function reservar(id) {
+        window.location.href = "/Livro/ReservarExemplar?id=" + id;
+    }
+</script>
+
+@section Scripts{
+    @Scripts.Render("~/Scripts/Util.js")
+}

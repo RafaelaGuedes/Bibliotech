@@ -32,9 +32,9 @@
             <thead>
                 <tr class="d-flex">
                     <th class="col-5">Título</th>
+                    <th class="col-1">Edição</th>
                     <th class="col-3">Autor</th>
-                    <th class="col-2">Edição</th>
-                    <th class="col-2 text-center"><i class="fa fa-cog"></i></th>
+                    <th class="col-3 text-center"><i class="fa fa-cog"></i></th>
                 </tr>
             </thead>
             <tbody>
@@ -42,9 +42,12 @@
                 {
                     <tr class="d-flex">
                         <td class="col-5">@(item.Titulo)</td>
-                        <td class="col-3">ADD LIVRO</td>
-                        <td class="col-2">@(item.Edicao)</td>
-                        <td class="col-2 text-center">
+                        <td class="col-1">@(item.Edicao)</td>
+                        <td class="col-3">@(item.Autor.Nome)</td>
+                        <td class="col-3 text-center">
+                            <button type="button" class="btn btn-info" onclick="visualizar('Livro', 'id', '@(item.Id)')">
+                                <i class="fa fa-info"></i>
+                            </button>
                             <button type="button" class="btn btn-warning" onclick="alterar('Livro', 'id', '@(item.Id)')">
                                 <i class="fa fa-pencil"></i>
                             </button>

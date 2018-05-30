@@ -1,0 +1,28 @@
+﻿<div class="modal fade formSearch" id="modalBuscarEditora" tabindex="-1" role="dialog" aria-hidden="true">
+    @using (Ajax.BeginForm("Buscar", "Editora", null,
+                                new AjaxOptions { HttpMethod = "post", OnSuccess = "sucessoEditoraSearch" }, new { id = "formBuscarEditora" }))
+    {
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buscar <small>Editora</small></h5>
+                    <button id="closeModalEditora" class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group col-md-8">
+                            @Html.Label("Nome", new { @for = "editoraNomeSearch" })
+                            @Html.TextBox("Nome", null, new { @id = "editoraNomeSearch", @class = "form-control", type = "text" })
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" onclick="buscarEditora()">Buscar</button>
+                </div>
+                <div id="listaEditoras" class="form-popup-resultados"></div>
+            </div>
+        </div>
+
+    }
+</div>

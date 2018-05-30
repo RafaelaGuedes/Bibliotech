@@ -183,7 +183,14 @@ namespace Bibliotech.Base
             {
                 session.Clear();
                 BeforeCommitSaveOrUpdate(session, ref entity);
-                session.SaveOrUpdate(entity);
+                try
+                {
+                    session.SaveOrUpdate(entity);
+                }
+                catch (NHibernate.NonUniqueObjectException ex)
+                {
+                    session.Merge(entity);
+                };
                 transaction.Commit();
             }
         }
