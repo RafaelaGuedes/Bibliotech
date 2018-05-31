@@ -50,7 +50,18 @@ namespace Bibliotech.Repository
         public override void LazyProperties(Exemplar entity)
         {
             if (entity.Livro != null)
+            {
                 entity.Livro.ToString();
+
+                if (entity.Livro.Autor != null)
+                    entity.Livro.Autor.ToString();
+
+                if (entity.Livro.Editora != null)
+                    entity.Livro.Editora.ToString();
+
+                if (entity.Livro.Prateleira != null)
+                    entity.Livro.Prateleira.ToString();
+            }
         }
     }
 }

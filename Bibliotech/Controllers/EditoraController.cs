@@ -12,15 +12,15 @@ using System.Web.Mvc;
 namespace Bibliotech.Controllers
 {
     [Authorize]
-    public class AutorController : Controller
+    public class EditoraController : Controller
     {
-        public ActionResult Listar(Autor exemplo, int page = 1)
+        public ActionResult Listar(Editora exemplo, int page = 1)
         {
-            var list = AutorRepository.Instance.GetListAutorByExample(exemplo)
+            var list = EditoraRepository.Instance.GetListEditoraByExample(exemplo)
                 .OrderBy(x => x.Nome)
                 .ToPagedList(page, Constantes.LIMITE_REGISTROS_PAGINA);
 
-            return View(new Tuple<IPagedList<Autor>, Autor>(list, exemplo));
+            return View(new Tuple<IPagedList<Editora>, Editora>(list, exemplo));
         }
 
         public ActionResult Adicionar()
@@ -30,29 +30,30 @@ namespace Bibliotech.Controllers
 
         public ActionResult Alterar(Guid id)
         {
-            Autor Autor = AutorRepository.Instance.GetById(id);
+            Editora Editora = EditoraRepository.Instance.GetById(id);
 
-            return View(Autor);
+            return View(Editora);
         }
 
         [HttpPost]
-        public JsonResult Salvar(Autor autor)
+        public JsonResult Salvar(Editora editora)
         {
             if (ModelState.IsValid)
             {
-                if (!BAutor.Instance.ValidarSalvar(ref autor))
+                if (!BEditora.Instance.ValidarSalvar(ref editora))
                 {
-                    return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
                 }
                 try
                 {
-                    AutorRepository.Instance.SaveOrUpdate(autor);
-                    return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    EditoraRepository.Instance.SaveOrUpdate(editora);
+                    return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
                 }
                 catch (NHibernate.StaleStateException dbcx)
                 {
                     return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
                 }
+
             }
             else
                 return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
@@ -60,23 +61,23 @@ namespace Bibliotech.Controllers
 
         public ActionResult Remover(Guid id)
         {
-            Autor autor = AutorRepository.Instance.GetById(id);
+            Editora editora = EditoraRepository.Instance.GetById(id);
 
-            if (!BAutor.Instance.ValidarRemover(ref autor))
+            if (!BEditora.Instance.ValidarRemover(ref editora))
             {
-                return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
             }
 
-            AutorRepository.Instance.Delete(autor);
+            EditoraRepository.Instance.Delete(editora);
+
             return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public JsonResult Buscar(Autor autor)
+        public JsonResult Buscar(Editora editora)
         {
-            List<Autor> list = AutorRepository.Instance.GetListAutorByExample(autor).OrderBy(x => x.Nome).ToList();
+            List<Editora> list = EditoraRepository.Instance.GetListEditoraByExample(editora).OrderBy(x => x.Nome).ToList();
             return Json(new { Lista = list.Select(x => new { Id = x.Id, Nome = x.Nome }) });
         }
     }
-
 }

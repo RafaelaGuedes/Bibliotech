@@ -26,10 +26,6 @@
                 <div class="form-group col-md-5">
                     @Html.LabelFor(x => x.Nome)
                     @Html.TextBoxFor(x => x.Nome, new { @class = "form-control", type = "text", @data_val_required = "teste", @data_val = true })
-                    <div class="invalid-feedback">
-                        Please choose a username.
-                        @Html.ValidationMessageFor(x => x.Nome)
-                    </div>
                 </div>
             </div>
 

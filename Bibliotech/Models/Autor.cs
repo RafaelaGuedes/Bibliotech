@@ -1,5 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
 using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Bibliotech.Models
 {
@@ -10,11 +12,10 @@ namespace Bibliotech.Models
 
         public virtual string Nome { get; set; }
 
-        public virtual DateTime? DataNascimento { get; set; }
-
-        public virtual string Telefone { get; set; }
-
         public virtual byte[] Version { get; set; }
+
+        [XmlIgnore]
+        public virtual IList<Livro> Livros { get; set; }
 
         public class AutorMap : ClassMap<Autor>
         {
@@ -22,10 +23,9 @@ namespace Bibliotech.Models
             {
                 Id(x => x.Id).GeneratedBy.GuidNative();
                 Map(x => x.Nome).Length(200).Not.Nullable();
-                Map(x => x.Telefone).Length(15);
-                Map(x => x.DataNascimento);
 
-                
+                HasMany<Livro>(x => x.Livros).Cascade.All().Inverse().LazyLoad();
+
                 Version(x => x.Version)
                     .Nullable()
                     .CustomSqlType("timestamp")

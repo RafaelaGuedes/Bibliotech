@@ -28,7 +28,7 @@ namespace Bibliotech.Repository
             }
         }
 
-        public List<Livro> GetListLivroByExample(Livro entity)
+        public List<Livro> GetListLivroByExample(Livro entity, bool lazyProperties = false)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
@@ -43,7 +43,6 @@ namespace Bibliotech.Repository
                 if (entity.Isbn != null)
                     criteria.Add(Restrictions.InsensitiveLike("Isbn", "%" + entity.Isbn + "%"));
 
-                //Mudar consulta tratando períodos
                 if (entity.AnoPublicao != null)
                     criteria.Add(Restrictions.Eq("AnoPublicacao", entity.AnoPublicao));
 
@@ -53,7 +52,13 @@ namespace Bibliotech.Repository
                 if (entity.Assunto != null)
                     criteria.Add(Restrictions.InsensitiveLike("Assunto", "%" + entity.Assunto + "%"));
 
-                return criteria.List<Livro>().ToList();
+                var list = criteria.List<Livro>().ToList();
+
+                if (lazyProperties && list != null)
+                    foreach(var item in list)
+                        LazyProperties(item);
+
+                return list;
             }
         }
 
@@ -63,6 +68,20 @@ namespace Bibliotech.Repository
             {
                 foreach (var item in entity.Exemplares)
                     item.ToString();
+            }
+
+            if (entity.Autor != null)
+                entity.Autor.ToString();
+
+            if (entity.Editora != null)
+                entity.Editora.ToString();
+
+            if (entity.Prateleira != null)
+            {
+                entity.Prateleira.ToString();
+
+                if (entity.Prateleira.Estante != null)
+                    entity.Prateleira.Estante.ToString();
             }
         }
 

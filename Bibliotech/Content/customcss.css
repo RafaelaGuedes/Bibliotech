@@ -1,0 +1,22 @@
+﻿.form-popup-resultados {
+    background: #F7F7F7;
+    border-top: 1px dashed #ccc;
+    overflow: hidden;
+    padding: 20px;
+}
+
+    .form-popup-resultados:empty {
+        border: none;
+        padding: 0;
+    }
+
+.form-popup-link {
+    color: dodgerblue !important;
+    border-bottom: 1px solid #ddd;
+    margin: 5px 0 10px 0px;
+    display: block;
+    clear: both;
+    overflow: hidden;
+    padding-bottom: 5px;
+    cursor: pointer;
+}

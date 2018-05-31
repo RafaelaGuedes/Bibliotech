@@ -10,7 +10,13 @@
 
 @model Livro
 
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery.mask.js"></script>
+
 @Html.Partial("~/Views/Livro/Manter.cshtml", Model)
+@Html.Partial("~/Views/Shared/BuscarAutor.cshtml")
+@Html.Partial("~/Views/Shared/BuscarEditora.cshtml")
+@Html.Partial("~/Views/Shared/BuscarPrateleira.cshtml")
 
 @section Scripts{
     @Scripts.Render("~/scripts/Util.js")
