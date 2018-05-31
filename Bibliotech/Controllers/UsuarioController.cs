@@ -1,13 +1,17 @@
-﻿using Bibliotech.Business;
+﻿using Bibliotech.Base;
+using Bibliotech.Business;
 using Bibliotech.Models;
 using Bibliotech.Repository;
 using Bibliotech.Util;
+using NReco.ImageGenerator;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace Bibliotech.Controllers
 {
@@ -71,5 +75,55 @@ namespace Bibliotech.Controllers
 
             return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GerarCartaoUsuario(Guid id)
+        {
+            string conteudo = FormatarCartaoUsuario(UsuarioRepository.Instance.GetById(id));
+
+            MemoryStream ms = Functions.ConvertHtmlToImage(conteudo, ImageFormat.Png, "--width 500 --height 150");
+            ViewBag.ImageSrc = Functions.GetPngImageSrc(ms);
+
+            return View();
+        }
+
+        private string FormatarCartaoUsuario(Usuario usuario)
+        {
+            string conteudo =
+                "<table border='1' width='500px' height='150px' style='margin-top: -8; margin-left: -8; border-collapse: collapse; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif'>" +
+                    "<tr>" +
+                        "<td width='150px' rowspan='5' style='text-align: center'>" +
+                            "<img src='[QRCODE]' width='130px' height='130px' />" +
+                        "</td>" +
+                        "<td>[NOME]</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>[LOGIN]</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>[EMAIL]</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>[DATA DE NASCIMENTO]</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>[TELEFONE]</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>[PERFIL]</td>" +
+                    "</tr>" +
+                "</table>";
+
+            conteudo = conteudo.Replace("[NOME]", usuario.Nome);
+            conteudo = conteudo.Replace("[LOGIN]", usuario.Login);
+            conteudo = conteudo.Replace("[EMAIL]", usuario.Email);
+            conteudo = conteudo.Replace("[DATA DE NASCIMENTO]", usuario.DataNascimento != null ? " - " + usuario.DataNascimento.ToString() + " Nascimento" : string.Empty);
+            conteudo = conteudo.Replace("[TELEFONE]", usuario.Telefone);
+            conteudo = conteudo.Replace("[PERFIL]", usuario.Perfil != null ? " - " + usuario.Perfil.ToString() + " Perfil" : string.Empty);
+            conteudo = conteudo.Replace("[QRCODE]", Functions.GetPngImageSrc(Functions.GenerateQRCode(usuario.Id.ToString(), 130, 130)));
+
+            return conteudo;
+        }
     }
+
+
 }
