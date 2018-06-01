@@ -65,7 +65,7 @@
 
             <div class="panel-footer">
                 <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
-                <button class="btn btn-primary" type="button" onclick="submitAction('Emprestimo', '@(ViewBag.ActionController)')">Salvar</button>
+                <button class="btn btn-primary" type="button" onclick="validarSalvarEmprestimo()">Salvar</button>
             </div>
 
         }
@@ -136,6 +136,25 @@
                 window.location.href = "/Home/Index";
             }
         });
+    }
+
+    function validarSalvarEmprestimo() {
+        var usuario = $('#Usuario_Id').val();
+        var exemplar = $('#Exemplar_Id').val();
+       
+
+        if (usuario == null || usuario == "") {
+            bootbox.alert("O campo Usuário é obrigatório");
+            return false;
+        }
+
+        if (exemplar == null || exemplar == "") {
+            bootbox.alert("O campo Exemplar é obrigatório");
+            return false;
+        }
+
+
+        submitAction('Emprestimo', '@(ViewBag.ActionController)');
     }
 </script>
 
