@@ -29,62 +29,93 @@ namespace Bibliotech.Controllers
 
         public ActionResult Adicionar()
         {
-            return View();
+            var usuarioLogado = Functions.GetCurrentUser();
+
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+                return View();
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Alterar(Guid id)
         {
             Usuario usuario = UsuarioRepository.Instance.GetById(id);
 
-            return View(usuario);
+            var usuarioLogado = Functions.GetCurrentUser();
+
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+                return View(usuario);
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public JsonResult Salvar(Usuario usuario)
         {
-            if (ModelState.IsValid)
+            var usuarioLogado = Functions.GetCurrentUser();
+            if (usuarioLogado.Perfil != Perfil.Padrao)
             {
-                if (!BUsuario.Instance.ValidarSalvar(ref usuario))
+                if (ModelState.IsValid)
                 {
-                    return Json(new { Status = BUsuario.Instance.Status(), Message = BUsuario.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
-                }
-                try
-                {
-                    UsuarioRepository.Instance.SaveOrUpdate(usuario);
-                    return Json(new { Status = BUsuario.Instance.Status(), Message = BUsuario.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
-                }
-                catch (NHibernate.StaleStateException dbcx)
-                {
-                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
-                }
+                    if (!BUsuario.Instance.ValidarSalvar(ref usuario))
+                    {
+                        return Json(new { Status = BUsuario.Instance.Status(), Message = BUsuario.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    try
+                    {
+                        UsuarioRepository.Instance.SaveOrUpdate(usuario);
+                        return Json(new { Status = BUsuario.Instance.Status(), Message = BUsuario.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (NHibernate.StaleStateException dbcx)
+                    {
+                        return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
+                    }
 
+                }
+                else
+                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Remover(Guid id)
-        {
-            Usuario usuario = UsuarioRepository.Instance.GetById(id);
-            if (!BUsuario.Instance.ValidarRemover(ref usuario))
+        {            
+            var usuarioLogado = Functions.GetCurrentUser();
+            if (usuarioLogado.Perfil != Perfil.Padrao)
             {
-                return Json(new { Status = BUsuario.Instance.Status(), Message = BUsuario.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
+                Usuario usuario = UsuarioRepository.Instance.GetById(id);
+
+                if (!BUsuario.Instance.ValidarRemover(ref usuario))
+                {
+                    return Json(new { Status = BUsuario.Instance.Status(), Message = BUsuario.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
+                }
+
+                UsuarioRepository.Instance.Delete(usuario);
+
+                return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
             }
+            else
+                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
 
-            UsuarioRepository.Instance.Delete(usuario);
-
-            return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GerarCartaoUsuario(Guid id)
         {
-            string conteudo = FormatarCartaoUsuario(UsuarioRepository.Instance.GetById(id));
+            var usuarioLogado = Functions.GetCurrentUser();
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+            {
+                string conteudo = FormatarCartaoUsuario(UsuarioRepository.Instance.GetById(id));
 
-            MemoryStream ms = Functions.ConvertHtmlToImage(conteudo, ImageFormat.Png, "--width 500 --height 150");
-            ViewBag.ImageSrc = Functions.GetPngImageSrc(ms);
+                MemoryStream ms = Functions.ConvertHtmlToImage(conteudo, ImageFormat.Png, "--width 500 --height 150");
+                ViewBag.ImageSrc = Functions.GetPngImageSrc(ms);
 
-            return View();
+                return View();
+            }
+            else
+                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
         }
+
 
         private string FormatarCartaoUsuario(Usuario usuario)
         {
