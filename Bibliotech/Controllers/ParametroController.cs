@@ -1,4 +1,5 @@
-﻿using Bibliotech.Business;
+﻿using Bibliotech.Base;
+using Bibliotech.Business;
 using Bibliotech.Models;
 using Bibliotech.Repository;
 using Bibliotech.Util;
@@ -18,33 +19,43 @@ namespace Bibliotech.Controllers
         public ActionResult Manter()
         {
             Parametro parametro = ParametroRepository.Instance.GetParametro() ?? new Parametro();
+            var usuarioLogado = Functions.GetCurrentUser();
 
-            return View(parametro);
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+                return View(parametro);
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public JsonResult Salvar(Parametro parametro)
         {
-            if (ModelState.IsValid)
+            var usuarioLogado = Functions.GetCurrentUser();
+            if (usuarioLogado.Perfil != Perfil.Padrao)
             {
-                if (!BParametro.Instance.ValidarSalvar(ref parametro))
-                {
-                    return Json(new { Status = BParametro.Instance.Status(), Message = BParametro.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
-                }
-                try
-                {
-                    ParametroRepository.Instance.SaveOrUpdate(parametro);
-                    return Json(new { Status = BParametro.Instance.Status(), Message = BParametro.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
-                }
-                catch (NHibernate.StaleStateException dbcx)
-                {
-                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
-                }
 
+                if (ModelState.IsValid)
+                {
+                    if (!BParametro.Instance.ValidarSalvar(ref parametro))
+                    {
+                        return Json(new { Status = BParametro.Instance.Status(), Message = BParametro.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    try
+                    {
+                        ParametroRepository.Instance.SaveOrUpdate(parametro);
+                        return Json(new { Status = BParametro.Instance.Status(), Message = BParametro.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (NHibernate.StaleStateException dbcx)
+                    {
+                        return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+                else
+                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
             }
-            else
-                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
+               else
+                 return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
         }
-
     }
 }

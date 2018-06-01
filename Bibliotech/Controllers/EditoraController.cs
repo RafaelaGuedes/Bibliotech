@@ -1,4 +1,5 @@
-﻿using Bibliotech.Business;
+﻿using Bibliotech.Base;
+using Bibliotech.Business;
 using Bibliotech.Models;
 using Bibliotech.Repository;
 using Bibliotech.Util;
@@ -25,52 +26,77 @@ namespace Bibliotech.Controllers
 
         public ActionResult Adicionar()
         {
-            return View();
+            var usuarioLogado = Functions.GetCurrentUser();
+
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+                return View();
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Alterar(Guid id)
         {
             Editora Editora = EditoraRepository.Instance.GetById(id);
 
-            return View(Editora);
+            var usuarioLogado = Functions.GetCurrentUser();
+
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+                return View(Editora);
+            else
+                return RedirectToAction("Index", "Home");
+
         }
 
         [HttpPost]
         public JsonResult Salvar(Editora editora)
         {
-            if (ModelState.IsValid)
-            {
-                if (!BEditora.Instance.ValidarSalvar(ref editora))
-                {
-                    return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
-                }
-                try
-                {
-                    EditoraRepository.Instance.SaveOrUpdate(editora);
-                    return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
-                }
-                catch (NHibernate.StaleStateException dbcx)
-                {
-                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
-                }
+            var usuarioLogado = Functions.GetCurrentUser();
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+            {            
+                if (ModelState.IsValid)
 
+                {
+                    if (!BEditora.Instance.ValidarSalvar(ref editora))
+                    {
+                        return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    try
+                    {
+                        EditoraRepository.Instance.SaveOrUpdate(editora);
+                        return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (NHibernate.StaleStateException dbcx)
+                    {
+                        return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
+                    }
+
+                }
+                else
+                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Remover(Guid id)
         {
             Editora editora = EditoraRepository.Instance.GetById(id);
+            var usuarioLogado = Functions.GetCurrentUser();
 
-            if (!BEditora.Instance.ValidarRemover(ref editora))
+            if (usuarioLogado.Perfil != Perfil.Padrao)
             {
-                return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
-            }
 
-            EditoraRepository.Instance.Delete(editora);
+                if (!BEditora.Instance.ValidarRemover(ref editora))
+                {
+                    return Json(new { Status = BEditora.Instance.Status(), Message = BEditora.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
+                }
 
-            return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
+                EditoraRepository.Instance.Delete(editora);
+
+                return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
+            } 
+            else
+                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
