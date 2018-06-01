@@ -27,23 +27,19 @@ namespace Bibliotech.Repository
                 return instance;
             }
         }
-        public List<Emprestimo> GetEmprestimosNaoFinalizadosByUsuario(Usuario usuario)
-        {
-            using (ISession session = NHibernateHelper.OpenSession())
-            {
-                ICriteria criteria = session.CreateCriteria(typeof(Emprestimo))
-                    .Add(Restrictions.IsNull("DataFim"));
-
-                if (usuario.Id != null)
-                    criteria.Add(Restrictions.Eq("Usuario.Id", usuario.Id));
-
-                return criteria.List<Emprestimo>().ToList();
-            }
-        }
 
         public override void LazyProperties(Emprestimo entity)
         {
+            if(entity.Exemplar != null)
+            {
+                entity.Exemplar.ToString();
 
+                if (entity.Exemplar.Livro != null)
+                    entity.Exemplar.Livro.ToString();
+            }
+
+            if (entity.Usuario != null)
+                entity.Usuario.ToString();
         }
 
         //Salva novo empréstimo e atualiza exemplar na mesma transação
@@ -61,6 +57,67 @@ namespace Bibliotech.Repository
                 session.SaveOrUpdate(exemplar);
 
                 transaction.Commit();
+            }
+        }
+
+        public List<Emprestimo> GetListEmprestimosAtivosByExemplo(Emprestimo emprestimo, bool lazyProperties = true)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                ICriteria criteria = session.CreateCriteria(typeof(Emprestimo))
+                    .Add(Restrictions.IsNull("DataFim"));
+
+                if (!Functions.IsNull(emprestimo.Usuario))
+                    criteria.Add(Restrictions.Eq("Usuario.Id", emprestimo.Usuario.Id));
+
+                var list = criteria.List<Emprestimo>().ToList();
+
+                if (lazyProperties && list != null)
+                    foreach (var item in list)
+                        LazyProperties(item);
+
+                return list;
+            }
+        }
+
+        public List<Emprestimo> GetListEmprestimosAtrasadosByExemplo(Emprestimo emprestimo, bool lazyProperties = true)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                ICriteria criteria = session.CreateCriteria(typeof(Emprestimo))
+                    .Add(Restrictions.IsNull("DataFim"))
+                    .Add(Restrictions.Lt("DataFimPrevisao", DateTime.Now));
+
+                if (!Functions.IsNull(emprestimo.Usuario))
+                    criteria.Add(Restrictions.Eq("Usuario.Id", emprestimo.Usuario.Id));
+
+                var list = criteria.List<Emprestimo>().ToList();
+
+                if (lazyProperties && list != null)
+                    foreach (var item in list)
+                        LazyProperties(item);
+
+                return list;
+            }
+        }
+
+        public List<Emprestimo> GetListEmprestimosAnterioresByExemplo(Emprestimo emprestimo, bool lazyProperties = true)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                ICriteria criteria = session.CreateCriteria(typeof(Emprestimo))
+                    .Add(Restrictions.IsNotNull("DataFim"));
+
+                if (!Functions.IsNull(emprestimo.Usuario))
+                    criteria.Add(Restrictions.Eq("Usuario.Id", emprestimo.Usuario.Id));
+
+                var list = criteria.List<Emprestimo>().ToList();
+
+                if (lazyProperties && list != null)
+                    foreach (var item in list)
+                        LazyProperties(item);
+
+                return list;
             }
         }
     }

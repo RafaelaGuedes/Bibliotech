@@ -13,10 +13,55 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 200px;
+        }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        .image {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
 
+        .overlay {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: auto;
+            width: auto;
+            opacity: 0;
+            transition: .3s ease;
+            background-color: deepskyblue;
+            max-width: 200px;
+        }
+
+        .container:hover .overlay {
+            opacity: 1;
+        }
+
+        .icon {
+            color: white;
+            font-size: 100px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .fa-user:hover {
+            color: #eee;
+        }
+    </style>
+</head>
+
+<body>
     <div class="table-responsive">
         <div class="panel-heading">
             <div class="row border-bottom" style="margin-left: 0px; margin-right: 0px;">
@@ -34,15 +79,23 @@
             <div class="row col-12">
                 @foreach (var livro in Model.Item1)
                 {
-                <div class="container">
-                    <img src="@Url.Content("~/Images/capadefault.png")" alt="Avatar" class="image" style="max-height: 200px;  width: 150px" />
-                    <div class="overlay">
-                        <a href="#" class="icon" title="@livro.Titulo">
-                            <i class="fa fa-info-circle"></i>
-                        </a>
+                    <div class="container">
+                        @if (livro.NomeFoto != null)
+                        {
+                            <img src="@Url.Content("/Livro/GetImagemCapa/" + livro.Id)" alt="@livro.Titulo" class="image" style="max-height: 200px;  width: 150px" />
+                        }
+                        else
+                        {
+                            <img src="@Url.Content("~/Images/capadefault.png")" alt="@livro.Titulo" class="image" style="max-height: 200px;  width: 150px" />
+                        }
+
+                        <div class="overlay">
+                            <a href="~/Livro/Visualizar?id=@livro.Id" class="icon" title="@livro.Titulo">
+                                <i class="fa fa-info-circle"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                   }
+                }
             </div>
         }
         else
@@ -120,61 +173,9 @@
         </div>
     </div>
 
-</head>
+</body>
+</html>
 
-<body>
-    
-    <style>
-        .container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .image {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: auto;
-            width: auto;
-            opacity: 0;
-            transition: .3s ease;
-            background-color: deepskyblue;
-            max-width: 200px;
-        }
-
-        .container:hover .overlay {
-            opacity: 1;
-        }
-
-        .icon {
-            color: white;
-            font-size: 100px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .fa-user:hover {
-            color: #eee;
-        }
-    </style>  
-    </body>
-    </html>
-
-    @section Scripts{
-        @Scripts.Render("~/Scripts/Util.js")
-
-
-    }
+@section Scripts{
+    @Scripts.Render("~/Scripts/Util.js")
+}

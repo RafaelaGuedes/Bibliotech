@@ -21,6 +21,8 @@ namespace Bibliotech.Util
         public static string USUARIO_SENHA_INVALIDOS = "Usuário ou senha inválidos.";
         public static string CODIGO_ESCANEADO_INVALIDO = "O Código escaneado é inválido.";
 
+        public static string USUARIO_SEM_PERMISSAO = "Você não possui permissão para realizar esta ação.";
+
         public static string LIMITE_EMPRESTIMOS_ATINGIDO = "Operação não realizada. O limite de Empréstimos ativos já foi atingido.";
         public static string LIMITE_RENOVACOES_ATINGIDO = "Operação não realizada. O limite de Renovações já foi atingido.";
         public static string PRAZO_RENOVACAO_EXPIROU = "Operação não realizada. O prazo para esta Renovação expirou.";

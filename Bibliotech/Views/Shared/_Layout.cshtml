@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Bibliotech.Base
+@using Bibliotech.Models
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8">
@@ -19,69 +21,76 @@
     <link href="~/Content/customcss.css" rel="stylesheet">
 </head>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-        <a class="navbar-brand" href="/Home">Bibliotech</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Perfil">
-                    <a class="nav-link" href="index.html">
-                        <i class="fa fa-user custom"></i>
-                        <span class="nav-link-text">Perfil</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Cadastro">
-                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-                        <i class="fa fa-user-plus custom"></i>
-                        <span class="nav-link-text">Cadastro</span>
-                    </a>
-                    <ul class="sidenav-second-level collapse" id="collapseComponents">
-                        <li>
-                            <a href="/Usuario/Listar">Usuário</a>
+    @{
+        var usuarioLogado = Functions.GetCurrentUser();
+
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <a class="navbar-brand" href="/Home">Bibliotech</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Perfil">
+                        <a class="nav-link" href="/Home/Index">
+                            <i class="fa fa-home custom"></i>
+                            <span class="nav-link-text">Início</span>
+                        </a>
+                    </li>
+                    @if (usuarioLogado.Perfil != Perfil.Padrao)
+                    {
+                        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Cadastro">
+                            <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseCadastro" data-parent="#exampleAccordion">
+                                <i class="fa fa-plus custom"></i>
+                                <span class="nav-link-text">Cadastro</span>
+                            </a>
+                            <ul class="sidenav-second-level collapse" id="collapseCadastro">
+                                <li>
+                                    <a href="/Usuario/Listar">Usuário</a>
+                                </li>
+                                <li>
+                                    <a href="/Usuario/Listar">Funcionário</a>
+                                </li>
+                                <li>
+                                    <a href="/Autor/Listar">Autor</a>
+                                </li>
+                                <li>
+                                    <a href="/Editora/Listar">Editora</a>
+                                </li>
+                                <li>
+                                    <a href="/Estante/Listar">Estante</a>
+                                </li>
+                                <li>
+                                    <a href="/Livro/Listar">Livro</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="/Usuario/Listar">Funcionário</a>
+
+                        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Empréstimo">
+                            <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseEmprestimo" data-parent="#exampleAccordion">
+                                <i class="fa fa-book"></i>
+                                <span class="nav-link-text">Empréstimo</span>
+                            </a>
+                            <ul class="sidenav-second-level collapse" id="collapseEmprestimo">
+                                <li>
+                                    <a href="/Emprestimo/Emprestimo">Novo Empréstimo</a>
+                                </li>
+                                <li>
+                                    <a href="/Emprestimo/Devolucao">Devolução</a>
+                                </li>
+                                <li>
+                                    <a href="#">Pagamento de Multa</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="/Autor/Listar">Autor</a>
-                        </li>
-                        <li>
-                            <a href="/Editora/Listar">Editora</a>
-                        </li>
-                        <li>
-                            <a href="/Estante/Listar">Estante</a>
-                        </li>
-                        <li>
-                            <a href="/Livro/Listar">Livro</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Empréstimo">
-                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
-                        <i class="fa fa-book"></i>
-                        <span class="nav-link-text">Empréstimo</span>
-                    </a>
-                    <ul class="sidenav-second-level collapse" id="collapseExamplePages">
-                        <li>
-                            <a href="Emprestimo/Emprestimo">Novo Empréstimo</a>
-                        </li>
-                        <li>
-                            <a href="Emprestimo/Devolucao">Devolução</a>
-                        </li>
-                        <li>
-                            <a href="#">Pagamento de Multa</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Minha área">
-                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+                    }
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Minha área">
+                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMinhaArea" data-parent="#exampleAccordion">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text">Minha Área</span>
                         </a>
-                        <ul class="sidenav-second-level collapse" id="collapseComponents">
+                        <ul class="sidenav-second-level collapse" id="collapseMinhaArea">
                             <li>
                                 <a href="#">Meus Empréstimos</a>
                             </li>
@@ -92,127 +101,89 @@
                                 <a href="#">Minhas Multas</a>
                             </li>
                         </ul>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Acervo ">
-                    <a class="nav-link" href="/Livro/Acervo">
-                        <i class="fa fa-tasks"></i>
-                        <span class="nav-link-text">Acervo</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Parâmetros">
-                    <a class="nav-link" href="/Parametro/Manter">
-                        <i class="fa fa-cogs"></i>
-                        <span class="nav-link-text">Parâmetros</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Painel de Indicadores">
-                    <a class="nav-link" href="#">
-                        <i class="fa fa-fw fa-dashboard"></i>
-                        <span class="nav-link-text">Painel de Indicadores</span>
-                    </a>
-                </li>
-            </ul>
-            <ul class="navbar-nav sidenav-toggler">
-                <li class="nav-item">
-                    <a class="nav-link text-center" id="sidenavToggler">
-                        <i class="fa fa-fw fa-angle-left"></i>
-                    </a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item dropdown">
-                  <div class="dropdown-menu" aria-labelledby="alertsDropdown">
-                        <h6 class="dropdown-header">New Alerts:</h6>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">
-                            <span class="text-success">
-                                <strong>
-                                    <i class="fa fa-long-arrow-up fa-fw"></i>Status Update
-                                </strong>
-                            </span>
-                            <span class="small float-right text-muted">11:21 AM</span>
-                            <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+                    </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Acervo ">
+                        <a class="nav-link" href="/Livro/Acervo">
+                            <i class="fa fa-tasks"></i>
+                            <span class="nav-link-text">Acervo</span>
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">
-                            <span class="text-danger">
-                                <strong>
-                                    <i class="fa fa-long-arrow-down fa-fw"></i>Status Update
-                                </strong>
-                            </span>
-                            <span class="small float-right text-muted">11:21 AM</span>
-                            <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+                    </li>
+                    @if (usuarioLogado.Perfil != Perfil.Padrao)
+                    {
+                        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Parâmetros">
+                            <a class="nav-link" href="/Parametro/Manter">
+                                <i class="fa fa-cogs"></i>
+                                <span class="nav-link-text">Parâmetros</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <ul class="navbar-nav sidenav-toggler">
+                    <li class="nav-item">
+                        <a class="nav-link text-center" id="sidenavToggler">
+                            <i class="fa fa-fw fa-angle-left"></i>
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">
-                            <span class="text-success">
-                                <strong>
-                                    <i class="fa fa-long-arrow-up fa-fw"></i>Status Update
-                                </strong>
-                            </span>
-                            <span class="small float-right text-muted">11:21 AM</span>
-                            <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="modal" data-target="#modalSignOut">
+                            <i class="fa fa-fw fa-sign-out"></i>Sair
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item small" href="#">View all alerts</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fa fa-fw fa-sign-out"></i>Sair
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class="content-wrapper">
-        <div class="container-fluid">
-            @RenderBody()
-        </div>
-        <!-- /.container-fluid-->
-        <!-- /.content-wrapper-->
-        <footer class="sticky-footer">
-            <div class="container">
-                <div class="text-center">
-                    <small>Copyright © Bibliotech 2018</small>
-                </div>
+                    </li>
+                </ul>
             </div>
-        </footer>
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fa fa-angle-up"></i>
-        </a>
-        <!-- Logout Modal-->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Pronto para sair?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+        </nav>
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <!-- /.container-fluid-->
+            <!-- /.content-wrapper-->
+            <footer class="sticky-footer">
+                <div class="container">
+                    <div class="text-center">
+                        <small>Copyright © Bibliotech 2018</small>
                     </div>
-                    <div class="modal-body">Selecione "Sair" abaixo se você estiver pronto para terminar sua sessão atual.</div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                        <a class="btn btn-primary" href="~/Account/SignOut">Sair</a>
+                </div>
+            </footer>
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="modalSignOut" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Pronto para sair?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Selecione "Sair" abaixo se você estiver pronto para terminar sua sessão atual.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                            <a class="btn btn-primary" href="~/Account/SignOut">Sair</a>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- Bootstrap core JavaScript-->
+            @*<script src="~/Content/base/vendor/jquery/jquery.min.js"></script>*@
+            <script src="~/Scripts/jquery-3.3.1.js"></script>
+            <script src="~/Content/base/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="~/Content/base/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="~/Content/base/js/sb-admin.min.js"></script>
+            <script src="~/Scripts/bootbox.js"></script>
         </div>
-        <!-- Bootstrap core JavaScript-->
-        @*<script src="~/Content/base/vendor/jquery/jquery.min.js"></script>*@
-        <script src="~/Scripts/jquery-3.3.1.js"></script>
-        <script src="~/Content/base/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- Core plugin JavaScript-->
-        <script src="~/Content/base/vendor/jquery-easing/jquery.easing.min.js"></script>
-        <!-- Custom scripts for all pages-->
-        <script src="~/Content/base/js/sb-admin.min.js"></script>
-        <script src="~/Scripts/bootbox.js"></script>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+
+    }
 </body>
 </html>
