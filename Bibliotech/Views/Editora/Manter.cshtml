@@ -30,7 +30,7 @@
 
                 <div class="panel-footer">
                     <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
-                    <button class="btn btn-primary" type="button" onclick="salvar('Editora')">Salvar</button>
+                    <button class="btn btn-primary" type="button" onclick="validarSalvarEditora()">Salvar</button>
                 </div>
 
             }
@@ -44,6 +44,17 @@
                     window.location.href = "/Editora/Listar";
                 }
             });
+        }
+
+        function validarSalvarEditora() {
+            var nome = $('#Nome').val();
+            
+            if (nome == null || nome == "") {
+                bootbox.alert("O campo Nome é obrigatório");
+                return false;
+            }
+
+            salvar('Editora');
         }
     </script>
 

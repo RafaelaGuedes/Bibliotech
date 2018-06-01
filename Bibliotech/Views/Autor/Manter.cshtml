@@ -30,7 +30,7 @@
 
             <div class="panel-footer">
                 <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
-                <button class="btn btn-primary" type="button" onclick="salvar('Autor')">Salvar</button>
+                <button class="btn btn-primary" type="button" onclick="validarSalvarAutor()">Salvar</button>
             </div>
 
         }
@@ -44,6 +44,17 @@
                 window.location.href = "/Autor/Listar";
             }
         });
+    }
+
+    function validarSalvarAutor() {
+        var nome = $('#Nome').val();
+
+        if (nome == null || nome == "") {
+            bootbox.alert("O campo Nome é obrigatório");
+            return false;
+        }
+
+        salvar('Autor');
     }
 </script>
 

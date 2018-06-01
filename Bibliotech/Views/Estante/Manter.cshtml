@@ -81,7 +81,7 @@
 
             <div class="panel-footer">
                 <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
-                <button class="btn btn-primary" type="button" onclick="salvar('Estante')">Salvar</button>
+                <button class="btn btn-primary" type="button" onclick="validarSalvarEstante()">Salvar</button>
             </div>
             
 
@@ -90,6 +90,17 @@
 </div>
 
 <script>
+
+    function validarSalvarEstante() {
+        var descricao = $('#Descricao').val();
+      
+        if (descricao == null || descricao == "") {
+            bootbox.alert("O campo Descrição é obrigatório");
+            return false;
+        }
+
+        salvar('Estante');
+    }
     function sucesso(data) {
         bootbox.alert(data.Message, function () {
             if (data.Status == 0) {
