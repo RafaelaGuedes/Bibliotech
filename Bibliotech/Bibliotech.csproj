@@ -511,6 +511,7 @@
     <Content Include="Views\Emprestimo\ListarEmprestimosAtivos.cshtml" />
     <Content Include="Views\Emprestimo\ListarEmprestimosAtrasados.cshtml" />
     <Content Include="Views\Emprestimo\ListarEmprestimosAnteriores.cshtml" />
+    <Content Include="Views\Usuario\GerarCartaoUsuario.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
