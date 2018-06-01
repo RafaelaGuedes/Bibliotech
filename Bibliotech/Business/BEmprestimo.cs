@@ -44,18 +44,18 @@ namespace Bibliotech.Business
 
         public bool ValidarEmprestimo(ref Emprestimo emprestimo, ref Exemplar exemplar)
         {
-            List<Emprestimo> emprestimosAtivos = EmprestimoRepository.Instance.GetEmprestimosNaoFinalizadosByUsuario(emprestimo.Usuario);
+            List<Emprestimo> emprestimosAtivos = 
+                EmprestimoRepository.Instance.GetListEmprestimosAtivosByExemplo(emprestimo);
 
-            //MUDAR DE 0 PARA LIMITE DEFINIDO EM PARÂMETROS
-            if (emprestimosAtivos != null && emprestimosAtivos.Count > 0)
+            Parametro parametro = ParametroRepository.Instance.GetParametro();
+            if (emprestimosAtivos != null && emprestimosAtivos.Count > parametro.QuantidadeMaximaEmprestimo)
             {
                 status = Constantes.STATUS_ERRO;
                 mensagemSalvar = Mensagens.LIMITE_EMPRESTIMOS_ATINGIDO;
             }
 
             emprestimo.DataInicio = DateTime.Now.Date;
-            //Mudar para tempo definido em parametros
-            emprestimo.DataFimPrevisao = DateTime.Now.AddDays(7).Date;
+            emprestimo.DataFimPrevisao = DateTime.Now.AddDays(parametro.DiasPrazoDevolucao.Value).Date;
             emprestimo.QuantidadeRenovacoes = 0;
 
             exemplar.Status = StatusExemplar.Emprestado;
@@ -68,7 +68,6 @@ namespace Bibliotech.Business
         public bool ValidarDevolucao(ref Emprestimo emprestimo, ref Exemplar exemplar)
         {
             emprestimo.DataFim = DateTime.Now.Date;
-
             exemplar.Status = StatusExemplar.Disponivel;
 
             SetMensagemSalvar(emprestimo);
@@ -76,7 +75,7 @@ namespace Bibliotech.Business
             return true;
         }
 
-        public bool ValidarRenovacao(ref Emprestimo emprestimo, ref Exemplar exemplar)
+        public bool ValidarRenovacao(ref Emprestimo emprestimo)
         {
             if (emprestimo.DataFimPrevisao.Value.Date < DateTime.Now.Date)
             {
@@ -84,15 +83,14 @@ namespace Bibliotech.Business
                 mensagemSalvar = Mensagens.PRAZO_RENOVACAO_EXPIROU;
             }
 
-            //MUDAR DE 0 PARA LIMITE DEFINIDO EM PARÂMETROS
-            if (emprestimo.QuantidadeRenovacoes > 0)
+            if (emprestimo.QuantidadeRenovacoes > 1)
             {
                 status = Constantes.STATUS_ERRO;
                 mensagemSalvar = Mensagens.LIMITE_RENOVACOES_ATINGIDO;
             }
 
-            //Mudar para tempo definido em parametros
-            emprestimo.DataFimPrevisao = emprestimo.DataFimPrevisao.Value.AddDays(7).Date;
+            Parametro parametro = ParametroRepository.Instance.GetParametro();
+            emprestimo.DataFimPrevisao = emprestimo.DataFimPrevisao.Value.AddDays(parametro.DiasPrazoDevolucao.Value).Date;
             emprestimo.QuantidadeRenovacoes += 1;
 
             SetMensagemSalvar(emprestimo);
@@ -104,16 +102,14 @@ namespace Bibliotech.Business
         {
             Parametro parametro = ParametroRepository.Instance.GetParametro();
             Usuario usuario = UsuarioRepository.Instance.GetById(emprestimo.Usuario.Id);
-            Livro livro = LivroRepository.Instance.GetById(emprestimo.Exemplar.Livro.Id);
+            Livro livro = ExemplarRepository.Instance.GetById(emprestimo.Exemplar.Id).Livro;
 
             string conteudo = "";
 
             conteudo += usuario.Nome + ", seu empréstimo foi realizado com sucesso. <br />";
-            conteudo += "Seu empréstimo foi realizado com sucesso. <br />";
-            conteudo += "Livro: " + livro.Titulo + " < br /> ";
-            conteudo += "Limite de entrega: " + emprestimo.DataFimPrevisao + " < br /> ";
+            conteudo += "Livro: " + livro.Titulo + " <br/> ";
+            conteudo += "Limite de entrega: " + emprestimo.DataFimPrevisao.Value.ToString("dd/MM/yyyy") + " <br/> ";
 
-            //Envia o e-mail
             MailMessage mail = new MailMessage(parametro.EmailRemetente, usuario.Email);
             SmtpClient client = new SmtpClient();
             client.Port = 587;
@@ -128,10 +124,6 @@ namespace Bibliotech.Business
 
             client.Credentials = new System.Net.NetworkCredential(parametro.EmailRemetente, parametro.Senha);
             client.Send(mail);
-
-
         }
-
-
     }
 }

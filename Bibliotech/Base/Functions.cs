@@ -1,4 +1,6 @@
-﻿using NReco.ImageGenerator;
+﻿using Bibliotech.Models;
+using Bibliotech.Repository;
+using NReco.ImageGenerator;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -55,6 +57,11 @@ namespace Bibliotech.Base
         public static string GetPngImageSrc(MemoryStream memoryStream)
         {
             return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray(), 0, memoryStream.ToArray().Length);
+        }
+
+        public static Usuario GetCurrentUser()
+        {
+            return UsuarioRepository.Instance.GetById(new Guid(System.Web.HttpContext.Current.User.Identity.Name));
         }
     }
 }

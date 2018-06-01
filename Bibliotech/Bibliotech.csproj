@@ -209,6 +209,7 @@
     <Compile Include="Repository\LivroRepository.cs" />
     <Compile Include="Repository\ParametroRepository.cs" />
     <Compile Include="Repository\PrateleiraRepository.cs" />
+    <Compile Include="Repository\ReservaRepository.cs" />
     <Compile Include="Repository\UsuarioRepository.cs" />
     <Compile Include="Util\Constantes.cs" />
     <Compile Include="Util\Mensagens.cs" />
@@ -507,6 +508,9 @@
     <Content Include="Views\Shared\BuscarEditora.cshtml" />
     <Content Include="Views\Shared\BuscarPrateleira.cshtml" />
     <Content Include="Views\Livro\GerarEtiquetaExemplar.cshtml" />
+    <Content Include="Views\Emprestimo\ListarEmprestimosAtivos.cshtml" />
+    <Content Include="Views\Emprestimo\ListarEmprestimosAtrasados.cshtml" />
+    <Content Include="Views\Emprestimo\ListarEmprestimosAnteriores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
