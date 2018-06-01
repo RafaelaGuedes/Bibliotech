@@ -178,7 +178,7 @@
 
         <div class="panel-footer">
             <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
-            <button class="btn btn-primary" type="button" onclick="salvarLivro()">Salvar</button>
+            <button class="btn btn-primary" type="button" onclick="validarSalvarLivro()">Salvar</button>
         </div>
     }
 </div>
@@ -345,6 +345,35 @@
             }
             reader.readAsDataURL(input.files[0]);
         }
+    }
+
+    function validarSalvarLivro() {
+        var titulo = $('#Titulo').val();
+        var autor = $('#Autor_Id').val();
+        var editora = $('#Editora_Id').val();
+        var prateleira = $('#Prateleira_Id').val();
+
+        if (titulo == null || titulo == "") {
+            bootbox.alert("O campo Título é obrigatório");
+            return false;
+        }
+
+        if (autor == null || autor == "") {
+            bootbox.alert("O campo Autor é obrigatório");
+            return false;
+        }
+
+        if (editora == null || editora == "") {
+            bootbox.alert("O campo Editora é obrigatório");
+            return false;
+        }
+
+        if (prateleira == null || prateleira == "") {
+            bootbox.alert("O campo Prateleira é obrigatório");
+            return false;
+        }
+
+        salvarLivro();
     }
 
     function salvarLivro() {

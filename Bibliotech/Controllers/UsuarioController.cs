@@ -120,36 +120,31 @@ namespace Bibliotech.Controllers
         private string FormatarCartaoUsuario(Usuario usuario)
         {
             string conteudo =
-                "<table border='1' width='500px' height='150px' style='margin-top: -8; margin-left: -8; border-collapse: collapse; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif'>" +
-                    "<tr>" +
-                        "<td width='150px' rowspan='5' style='text-align: center'>" +
-                            "<img src='[QRCODE]' width='130px' height='130px' />" +
-                        "</td>" +
-                        "<td>[NOME]</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                        "<td>[LOGIN]</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                        "<td>[EMAIL]</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                        "<td>[DATA DE NASCIMENTO]</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                        "<td>[TELEFONE]</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                        "<td>[PERFIL]</td>" +
-                    "</tr>" +
-                "</table>";
+                "<html>" +
+                "<head>" +
+                    "<meta charset='UTF-8'>" +
+                "</head>" +
+                "<body>" +
+                    "<table border='1' width='500px' height='150px' style='margin-top: -8; margin-left: -8; border-collapse: collapse; font-family: Franklin Gothic Medium, Arial Narrow, Arial, sans-serif'>" +
+                        "<tr>" +
+                            "<td width='150px' rowspan='3' style='text-align: center'>" +
+                                "<img src='[QRCODE]' width='130px' height='130px' />" +
+                            "</td>" +
+                            "<td>[NOME]</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td>[LOGIN]</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td>[DATA DE NASCIMENTO]</td>" +
+                        "</tr>" +
+                    "</table>" +
+                "</body>" +
+                "</html>";
 
             conteudo = conteudo.Replace("[NOME]", usuario.Nome);
             conteudo = conteudo.Replace("[LOGIN]", usuario.Login);
-            conteudo = conteudo.Replace("[EMAIL]", usuario.Email);
-            conteudo = conteudo.Replace("[DATA DE NASCIMENTO]", usuario.DataNascimento != null ? " - " + usuario.DataNascimento.ToString() + " Nascimento" : string.Empty);
-            conteudo = conteudo.Replace("[TELEFONE]", usuario.Telefone);
-            conteudo = conteudo.Replace("[PERFIL]", usuario.Perfil != null ? " - " + usuario.Perfil.ToString() + " Perfil" : string.Empty);
+            conteudo = conteudo.Replace("[DATA DE NASCIMENTO]", usuario.DataNascimento.Value.ToString("dd/MM/yyyy"));
             conteudo = conteudo.Replace("[QRCODE]", Functions.GetPngImageSrc(Functions.GenerateQRCode(usuario.Id.ToString(), 130, 130)));
 
             return conteudo;
