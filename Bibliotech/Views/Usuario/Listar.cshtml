@@ -31,18 +31,21 @@
         <table class="table table-striped">
             <thead>
                 <tr class="d-flex">
-                    <th class="col-5">Nome</th>
-                    <th class="col-5">Email</th>
-                    <th class="col-2 text-center"><i class="fa fa-cog"></i></th>
+                    <th class="col-4">Nome</th>
+                    <th class="col-4">Email</th>
+                    <th class="col-4 text-center"><i class="fa fa-cog"></i></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model.Item1)
                 {
                     <tr class="d-flex">
-                        <td class="col-5">@(item.Nome)</td>
-                        <td class="col-5">@(item.Email)</td>
-                        <td class="col-2 text-center">
+                        <td class="col-4">@(item.Nome)</td>
+                        <td class="col-4">@(item.Email)</td>
+                        <td class="col-4 text-center">
+                            <button type="button" class="btn btn-secondary" onclick="gerarCartao('@(item.Id)')">
+                                <i class="fa fa-qrcode"></i> Gerar Cartão
+                            </button>
                             <button type="button" class="btn btn-warning" onclick="alterar('Usuario', 'id', '@(item.Id)')">
                                 <i class="fa fa-pencil"></i>
                             </button>
@@ -120,6 +123,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    function gerarCartao(id) {
+        window.location.href = "/Usuario/GerarCartaoUsuario?id=" + id;
+    }
+
+</script>
 
 @section Scripts{
     @Scripts.Render("~/Scripts/Util.js")

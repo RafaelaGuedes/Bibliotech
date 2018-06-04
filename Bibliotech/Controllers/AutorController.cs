@@ -1,4 +1,5 @@
-﻿using Bibliotech.Business;
+﻿using Bibliotech.Base;
+using Bibliotech.Business;
 using Bibliotech.Models;
 using Bibliotech.Repository;
 using Bibliotech.Util;
@@ -25,50 +26,75 @@ namespace Bibliotech.Controllers
 
         public ActionResult Adicionar()
         {
-            return View();
+            var usuarioLogado = Functions.GetCurrentUser();
+
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+                return View();
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Alterar(Guid id)
         {
             Autor Autor = AutorRepository.Instance.GetById(id);
 
-            return View(Autor);
+            var usuarioLogado = Functions.GetCurrentUser();
+
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+                return View(Autor);
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         public JsonResult Salvar(Autor autor)
         {
-            if (ModelState.IsValid)
+            var usuarioLogado = Functions.GetCurrentUser();
+            if (usuarioLogado.Perfil != Perfil.Padrao)
             {
-                if (!BAutor.Instance.ValidarSalvar(ref autor))
+                if (ModelState.IsValid)
                 {
-                    return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    if (!BAutor.Instance.ValidarSalvar(ref autor))
+                    {
+                        return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    try
+                    {
+                        AutorRepository.Instance.SaveOrUpdate(autor);
+                        return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (NHibernate.StaleStateException dbcx)
+                    {
+                        return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
+                    }
                 }
-                try
-                {
-                    AutorRepository.Instance.SaveOrUpdate(autor);
-                    return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemSalvar() }, JsonRequestBehavior.AllowGet);
-                }
-                catch (NHibernate.StaleStateException dbcx)
-                {
-                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_CONCORRENCIA }, JsonRequestBehavior.AllowGet);
-                }
+                else
+                    return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.ERRO_GENERICO }, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
         }
+
 
         public ActionResult Remover(Guid id)
         {
             Autor autor = AutorRepository.Instance.GetById(id);
 
-            if (!BAutor.Instance.ValidarRemover(ref autor))
-            {
-                return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
-            }
+            var usuarioLogado = Functions.GetCurrentUser();
 
-            AutorRepository.Instance.Delete(autor);
-            return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
+            if (usuarioLogado.Perfil != Perfil.Padrao)
+            {
+
+                if (!BAutor.Instance.ValidarRemover(ref autor))
+                {
+                    return Json(new { Status = BAutor.Instance.Status(), Message = BAutor.Instance.MensagemRemover() }, JsonRequestBehavior.AllowGet);
+                }
+
+                AutorRepository.Instance.Delete(autor);
+                return Json(new { Status = Constantes.STATUS_SUCESSO, Message = Mensagens.REMOVIDO_SUCESSO }, JsonRequestBehavior.AllowGet);
+            }
+            else
+                return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SEM_PERMISSAO }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

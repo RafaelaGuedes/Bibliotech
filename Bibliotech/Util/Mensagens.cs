@@ -14,12 +14,15 @@ namespace Bibliotech.Util
         public static string RESERVA_SUCESSO = "Reserva realizada com sucesso.";
         public static string RENOVACAO_SUCESSO = "Renovação realizada com sucesso.";
         public static string DEVOLUCAO_SUCESSO = "Devolução realizada com sucesso.";
+        public static string PAGAMENTO_SUCESSO = "Pagamento registrado com sucesso.";
 
         public static string ERRO_GENERICO = "Ocorreu um erro.";
         public static string ERRO_CONCORRENCIA = "Este registro foi modificado recentemente. Atualize a página e tente novamente.";
 
         public static string USUARIO_SENHA_INVALIDOS = "Usuário ou senha inválidos.";
         public static string CODIGO_ESCANEADO_INVALIDO = "O Código escaneado é inválido.";
+
+        public static string USUARIO_SEM_PERMISSAO = "Você não possui permissão para realizar esta ação.";
 
         public static string LIMITE_EMPRESTIMOS_ATINGIDO = "Operação não realizada. O limite de Empréstimos ativos já foi atingido.";
         public static string LIMITE_RENOVACOES_ATINGIDO = "Operação não realizada. O limite de Renovações já foi atingido.";

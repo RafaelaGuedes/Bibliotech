@@ -1,7 +1,11 @@
-﻿using NReco.ImageGenerator;
+﻿using Bibliotech.Models;
+using Bibliotech.Repository;
+using NReco.ImageGenerator;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -10,7 +14,7 @@ using ZXing.QrCode;
 
 namespace Bibliotech.Base
 {
-    public class Functions
+    public static class Functions
     {
         public static bool IsNull(object obj)
         {
@@ -55,6 +59,37 @@ namespace Bibliotech.Base
         public static string GetPngImageSrc(MemoryStream memoryStream)
         {
             return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray(), 0, memoryStream.ToArray().Length);
+        }
+
+        public static Usuario GetCurrentUser()
+        {
+            return UsuarioRepository.Instance.GetById(new Guid(System.Web.HttpContext.Current.User.Identity.Name));
+        }
+
+        public static string GetEnumDescription<T>(this T e) where T : IConvertible
+        {
+            string description = null;
+
+            if (e is Enum)
+            {
+                Type type = e.GetType();
+                Array values = System.Enum.GetValues(type);
+
+                foreach (int val in values)
+                {
+                    if (val == e.ToInt32(CultureInfo.InvariantCulture))
+                    {
+                        var memInfo = type.GetMember(type.GetEnumName(val));
+                        var descriptionAttributes = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+                        if (descriptionAttributes.Length > 0)
+                            description = ((DescriptionAttribute)descriptionAttributes[0]).Description;
+
+                        break;
+                    }
+                }
+            }
+
+            return description;
         }
     }
 }

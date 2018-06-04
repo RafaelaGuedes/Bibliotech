@@ -1,0 +1,41 @@
+﻿@using Bibliotech
+@using Bibliotech.Models
+@using PagedList
+@using PagedList.Mvc
+
+@{
+    ViewBag.Action = "Cartão do Usuário";
+    ViewBag.Title = "Gerar";
+}
+
+
+<div class="panel panel-default">
+    <br />
+
+    <div class="panel-heading">
+        <div class="row border-bottom" style="margin-left: 0px; margin-right: 0px;">
+            @Html.Partial("~/Views/Shared/_PageHeader.cshtml")
+        </div>
+    </div>
+
+    <br />
+
+    <div class="panel-body">
+        <div class="card">
+            <div class="card-body">
+                <img src="@ViewBag.ImageSrc" />
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="panel-footer">
+        <button class="btn btn-secondary" type="button" onclick="voltar()">Voltar</button>
+    </div>
+
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/Scripts/Util.js")
+}

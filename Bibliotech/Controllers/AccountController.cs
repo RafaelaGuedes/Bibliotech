@@ -32,7 +32,7 @@ namespace Bibliotech.Controllers
                 if(usuario == null)
                     return Json(new { Status = Constantes.STATUS_ERRO, Message = Mensagens.USUARIO_SENHA_INVALIDOS }, JsonRequestBehavior.AllowGet);
 
-                FormsAuthentication.SetAuthCookie(usuario.Email, false);
+                FormsAuthentication.SetAuthCookie(usuario.Id.ToString(), false);
                 return Json(new { Status = Constantes.STATUS_SUCESSO }, JsonRequestBehavior.AllowGet);
             }
             else

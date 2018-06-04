@@ -1,0 +1,120 @@
+﻿@using Bibliotech.Base
+@using Bibliotech.Business
+@using Bibliotech.Models
+@using PagedList
+@using PagedList.Mvc
+
+@{
+    ViewBag.Action = "Multas";
+    ViewBag.Title = "Registrar Pagamento";
+}
+
+@model Tuple<IPagedList<Emprestimo>, Emprestimo>
+
+
+<div class="table-responsive">
+    <div class="panel-heading">
+        <div class="row border-bottom" style="margin-left: 0px; margin-right: 0px;">
+            @Html.Partial("~/Views/Shared/_PageHeader.cshtml")
+        </div>
+    </div>
+
+    @if (Model.Item1.Count > 0)
+    {
+        var usuarioLogado = Functions.GetCurrentUser();
+
+        <table class="table table-striped">
+            <thead>
+                <tr class="d-flex">
+                    <th class="col-2">Início</th>
+                    <th class="col-2">Limite para Entrega</th>
+                    <th class="col-2">Multa atualizada</th>
+                    <th class="col-3">Emprestante</th>
+                    <th class="col-2 text-center"><i class="fa fa-cog"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Item1)
+                {
+                    var valorMulta = BEmprestimo.Instance.TratarMulta(item.Id);
+
+                    <tr class="d-flex">
+                        <td class="col-2">@(item.DataInicio.Value.ToString("dd/MM/yyyy"))</td>
+                        <td class="col-2" style="color: darkred">@(item.DataFimPrevisao.Value.ToString("dd/MM/yyyy"))</td>
+                        <td class="col-2">@valorMulta</td>
+                        <td class="col-3">@(item.Usuario.Nome)</td>
+                        <td class="col-2 text-center">
+                            <button type="button" class="btn btn-dark" onclick="pagarMulta('@(item.Id)',@valorMulta)">
+                                <i class="fa fa-money"></i> Pagar multa
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-secondary" role="alert">
+            Nenhum registro encontrado.
+        </div>
+    }
+
+    @if (Model.Item1.HasNextPage || Model.Item1.HasPreviousPage)
+    {
+        <div class="text-center">
+            @Html.PagedListPager(Model.Item1, (page) => Url.Action("ListarEmprestimosAtrasados",
+                                  new RouteValueDictionary
+                         {   { "page", page }
+                        }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+        </div>
+    }
+
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/Scripts/Util.js")
+}
+
+<script>
+    function pagarMulta(id, valor) {
+        bootbox.confirm({
+            message: "Confirma o pagamento no valor de R$" + valor + "?",
+            buttons: {
+                confirm: {
+                    label: 'Confirmar',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Cancelar',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/PagamentoMulta/Pagar?pagamentoMulta.Emprestimo.Id=" + id + "&pagamentoMulta.Valor=" + valor,
+                        success: function (data) {
+                            sucesso(data);
+                        },
+                        error: function (msg) {
+                            var title = (/<title>(.*?)<\/title>/m).exec(msg.responseText)[1];
+                            bootbox.alert(title);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function sucesso(data) {
+        bootbox.alert(data.Message, function () {
+            if (data.Status == 0) {
+                location.reload(true);
+            }
+        });
+    }
+</script>
+
